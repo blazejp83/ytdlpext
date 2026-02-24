@@ -37,11 +37,11 @@ Plans:
 **Depends on**: Phase 1
 **Requirements**: DL-02, DL-03, DL-04, DL-05, AUDIO-01, AUDIO-02, AUDIO-03, AUDIO-04, PROG-02, PROG-03
 **Research**: Unlikely (yt-dlp well-documented, go-ytdlp handles complexity)
-**Plans**: TBD
+**Plans**: 2 plans, 2 waves
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01: Go companion - format query, download options, error enhancement (Wave 1)
+- [ ] 02-02: Extension UI - format picker, audio options, notifications (Wave 2, depends: 02-01)
 
 ### Phase 3: Site Integration + Enhancements
 **Goal**: Per-site download button injection on all 5 sites, audio-primary UI for Bandcamp/SoundCloud, SponsorBlock and subtitle support for YouTube, cookie-based auth for age-restricted content, download history, and keyboard shortcut
