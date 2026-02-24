@@ -29,8 +29,8 @@ None
 **Plans**: TBD
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01: Native messaging + extension shell (Wave 1)
+- [ ] 01-02: Download pipeline + UI (Wave 2, depends: 01-01)
 
 ### Phase 2: Full Download Experience
 **Goal**: Complete download pipeline with format/quality picker, audio extraction in multiple formats with metadata and cover art, automatic muxing, meaningful error messages, and download completion notifications
