@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ytdlext</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-info">
+        <div class="page-title" id="page-title">Loading...</div>
+        <div class="page-url" id="page-url"></div>
+      </div>
+      <div class="action" id="action-section">
+        <button class="download-btn" id="download-btn">
+          Download Best Quality
+        </button>
+      </div>
+      <div class="status" id="status-section" hidden>
+        <div class="status-text" id="status-text"></div>
+      </div>
+      <div class="unsupported" id="unsupported-section" hidden>
+        <div class="unsupported-text">Not a supported site</div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
