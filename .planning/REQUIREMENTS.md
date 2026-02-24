@@ -89,37 +89,37 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FNDTN-01 | — | Pending |
-| FNDTN-02 | — | Pending |
-| FNDTN-03 | — | Pending |
-| DL-01 | — | Pending |
-| DL-02 | — | Pending |
-| DL-03 | — | Pending |
-| DL-04 | — | Pending |
-| DL-05 | — | Pending |
-| AUDIO-01 | — | Pending |
-| AUDIO-02 | — | Pending |
-| AUDIO-03 | — | Pending |
-| AUDIO-04 | — | Pending |
-| PROG-01 | — | Pending |
-| PROG-02 | — | Pending |
-| PROG-03 | — | Pending |
-| SITE-01 | — | Pending |
-| SITE-02 | — | Pending |
-| SITE-03 | — | Pending |
-| SITE-04 | — | Pending |
-| CFG-01 | — | Pending |
-| YT-01 | — | Pending |
-| YT-02 | — | Pending |
-| ADV-01 | — | Pending |
-| ADV-02 | — | Pending |
-| ADV-03 | — | Pending |
+| FNDTN-01 | Phase 1 | Pending |
+| FNDTN-02 | Phase 1 | Pending |
+| FNDTN-03 | Phase 1 | Pending |
+| DL-01 | Phase 1 | Pending |
+| DL-02 | Phase 2 | Pending |
+| DL-03 | Phase 2 | Pending |
+| DL-04 | Phase 2 | Pending |
+| DL-05 | Phase 2 | Pending |
+| AUDIO-01 | Phase 2 | Pending |
+| AUDIO-02 | Phase 2 | Pending |
+| AUDIO-03 | Phase 2 | Pending |
+| AUDIO-04 | Phase 2 | Pending |
+| PROG-01 | Phase 1 | Pending |
+| PROG-02 | Phase 2 | Pending |
+| PROG-03 | Phase 2 | Pending |
+| SITE-01 | Phase 3 | Pending |
+| SITE-02 | Phase 3 | Pending |
+| SITE-03 | Phase 3 | Pending |
+| SITE-04 | Phase 3 | Pending |
+| CFG-01 | Phase 1 | Pending |
+| YT-01 | Phase 3 | Pending |
+| YT-02 | Phase 3 | Pending |
+| ADV-01 | Phase 3 | Pending |
+| ADV-02 | Phase 3 | Pending |
+| ADV-03 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 25 total
-- Mapped to phases: 0
-- Unmapped: 25 (awaiting roadmap)
+- Mapped to phases: 25
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after initial definition*
+*Last updated: 2026-02-24 after roadmap creation*
