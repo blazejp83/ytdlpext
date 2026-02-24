@@ -18,6 +18,49 @@
         </button>
       </div>
 
+      <div class="format-picker" id="format-picker" hidden>
+        <div class="tab-bar">
+          <button class="tab active" id="tab-video" data-tab="video">Video</button>
+          <button class="tab" id="tab-audio" data-tab="audio">Audio</button>
+        </div>
+
+        <div class="tab-content" id="tab-content-video">
+          <div class="format-list" id="format-list">
+            <label class="format-row selected">
+              <input type="radio" name="video-format" value="" checked />
+              <span class="format-label">Best Quality</span>
+              <span class="format-detail">Auto-select best video + audio</span>
+            </label>
+          </div>
+          <button class="download-btn" id="video-download-btn">Download</button>
+        </div>
+
+        <div class="tab-content" id="tab-content-audio" hidden>
+          <div class="audio-format-chips">
+            <button class="chip selected" data-format="mp3">MP3</button>
+            <button class="chip" data-format="flac">FLAC</button>
+            <button class="chip" data-format="wav">WAV</button>
+            <button class="chip" data-format="ogg">Ogg</button>
+          </div>
+          <div class="audio-options">
+            <label class="checkbox-row">
+              <input type="checkbox" id="embed-metadata" checked />
+              <span>Include metadata</span>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" id="embed-thumbnail" checked />
+              <span>Include cover art</span>
+            </label>
+          </div>
+          <button class="download-btn" id="audio-download-btn">Download</button>
+        </div>
+      </div>
+
+      <div class="loading-section" id="loading-section" hidden>
+        <div class="spinner"></div>
+        <div class="loading-text">Loading formats...</div>
+      </div>
+
       <div class="action" id="action-section" hidden>
         <button class="download-btn" id="download-btn">
           Download Best Quality

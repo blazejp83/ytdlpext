@@ -1,8 +1,10 @@
-// ytdlext popup — shows page info, download action, and real-time progress.
+// ytdlext popup — shows page info, format picker, download action, and real-time progress.
 
 document.addEventListener("DOMContentLoaded", () => {
   const pageTitle = document.getElementById("page-title");
   const pageUrl = document.getElementById("page-url");
+  const formatPicker = document.getElementById("format-picker");
+  const loadingSection = document.getElementById("loading-section");
   const actionSection = document.getElementById("action-section");
   const downloadBtn = document.getElementById("download-btn");
   const progressSection = document.getElementById("progress-section");
@@ -20,8 +22,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const unsupportedSection = document.getElementById("unsupported-section");
   const settingsBtn = document.getElementById("settings-btn");
 
+  // Format picker elements.
+  const tabVideo = document.getElementById("tab-video");
+  const tabAudio = document.getElementById("tab-audio");
+  const tabContentVideo = document.getElementById("tab-content-video");
+  const tabContentAudio = document.getElementById("tab-content-audio");
+  const formatList = document.getElementById("format-list");
+  const videoDownloadBtn = document.getElementById("video-download-btn");
+  const audioDownloadBtn = document.getElementById("audio-download-btn");
+  const embedMetadata = document.getElementById("embed-metadata");
+  const embedThumbnail = document.getElementById("embed-thumbnail");
+
   let currentUrl = "";
   let currentTitle = "";
+  let selectedAudioFormat = "mp3";
 
   // Query the service worker for page info.
   chrome.runtime.sendMessage({ type: "getPageInfo" }, (response) => {
@@ -39,10 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
       pageUrl.textContent = truncateUrl(response.url);
       pageUrl.title = response.url;
 
-      // Check for in-progress download before showing download button.
+      // Check for in-progress download before showing format picker.
       chrome.runtime.sendMessage({ type: "getDownloadState" }, (state) => {
         if (chrome.runtime.lastError || !state?.download) {
-          showIdle();
+          loadFormats();
           return;
         }
 
@@ -59,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             showError(dl.errorMessage);
             break;
           default:
-            showIdle();
+            loadFormats();
         }
       });
     } else {
@@ -67,15 +81,137 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Download button click handler.
-  downloadBtn.addEventListener("click", startDownload);
+  // Load formats from companion.
+  function loadFormats() {
+    hideAll();
+    loadingSection.hidden = false;
+
+    chrome.runtime.sendMessage(
+      { type: "getFormats", url: currentUrl },
+      (response) => {
+        if (chrome.runtime.lastError || !response || response.error) {
+          // Fallback to simple "Best Quality" button if format query fails.
+          showIdle();
+          return;
+        }
+
+        populateFormats(response);
+        hideAll();
+        formatPicker.hidden = false;
+      }
+    );
+  }
+
+  // Populate format list from companion response.
+  function populateFormats(data) {
+    // Clear existing format rows (keep "Best Quality" default).
+    const bestQualityRow = formatList.querySelector(".format-row");
+    formatList.innerHTML = "";
+    formatList.appendChild(bestQualityRow);
+
+    // Add video formats.
+    const videoFormats = data.videoFormats || [];
+    videoFormats.forEach((fmt) => {
+      const row = document.createElement("label");
+      row.className = "format-row";
+
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "video-format";
+      radio.value = fmt.formatId || "";
+
+      const label = document.createElement("span");
+      label.className = "format-label";
+      label.textContent = fmt.resolution || fmt.formatId || "Unknown";
+
+      const detail = document.createElement("span");
+      detail.className = "format-detail";
+      const parts = [];
+      if (fmt.codec) parts.push(fmt.codec);
+      if (fmt.fps && fmt.fps > 30) parts.push(fmt.fps + "fps");
+      if (fmt.fileSize) parts.push(formatFileSize(fmt.fileSize));
+      detail.textContent = parts.join(" | ");
+
+      row.appendChild(radio);
+      row.appendChild(label);
+      row.appendChild(detail);
+      formatList.appendChild(row);
+    });
+
+    // Attach click handlers for format row highlighting.
+    formatList.querySelectorAll(".format-row").forEach((row) => {
+      row.addEventListener("click", () => {
+        formatList
+          .querySelectorAll(".format-row")
+          .forEach((r) => r.classList.remove("selected"));
+        row.classList.add("selected");
+      });
+    });
+  }
+
+  // Format file size for display.
+  function formatFileSize(bytes) {
+    if (!bytes || bytes <= 0) return "";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + " KB";
+    if (bytes < 1024 * 1024 * 1024)
+      return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    return (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
+  }
+
+  // Tab switching.
+  tabVideo.addEventListener("click", () => {
+    tabVideo.classList.add("active");
+    tabAudio.classList.remove("active");
+    tabContentVideo.hidden = false;
+    tabContentAudio.hidden = true;
+  });
+
+  tabAudio.addEventListener("click", () => {
+    tabAudio.classList.add("active");
+    tabVideo.classList.remove("active");
+    tabContentAudio.hidden = false;
+    tabContentVideo.hidden = true;
+  });
+
+  // Audio format chip selection.
+  document.querySelectorAll(".chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document
+        .querySelectorAll(".chip")
+        .forEach((c) => c.classList.remove("selected"));
+      chip.classList.add("selected");
+      selectedAudioFormat = chip.dataset.format;
+    });
+  });
+
+  // Video download button.
+  videoDownloadBtn.addEventListener("click", () => {
+    const selected = formatList.querySelector(
+      'input[name="video-format"]:checked'
+    );
+    const formatId = selected ? selected.value : "";
+    startDownload({ formatId });
+  });
+
+  // Audio download button.
+  audioDownloadBtn.addEventListener("click", () => {
+    startDownload({
+      audioOnly: true,
+      audioFormat: selectedAudioFormat,
+      embedMetadata: embedMetadata.checked,
+      embedThumbnail: embedThumbnail.checked,
+    });
+  });
+
+  // Fallback download button click handler.
+  downloadBtn.addEventListener("click", () => startDownload({}));
 
   // Retry button click handler.
-  retryBtn.addEventListener("click", startDownload);
+  retryBtn.addEventListener("click", () => startDownload({}));
 
   // Download another button click handler.
   downloadAnotherBtn.addEventListener("click", () => {
-    showIdle();
+    loadFormats();
   });
 
   // Settings button opens the options page.
@@ -102,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function startDownload() {
+  function startDownload(options) {
     if (!currentUrl) return;
 
     hideAll();
@@ -117,6 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "startDownload",
       url: currentUrl,
       title: currentTitle,
+      ...options,
     });
   }
 
@@ -163,6 +300,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function hideAll() {
+    formatPicker.hidden = true;
+    loadingSection.hidden = true;
     actionSection.hidden = true;
     progressSection.hidden = true;
     completeSection.hidden = true;

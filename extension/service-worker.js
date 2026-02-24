@@ -15,6 +15,12 @@ const pageInfo = new Map();
 // Active download state.
 let currentDownload = null;
 
+// Pending format request callback.
+let pendingFormatsCallback = null;
+
+// Notification ID -> download directory mapping for "Open Folder" on click.
+const notificationDirs = new Map();
+
 // --- Native host connection ---
 
 function connectToHost() {
@@ -94,8 +100,23 @@ function handleNativeMessage(msg) {
       percentage: 100,
       filename: msg.data.filename || currentDownload?.filename || "",
       path: msg.data.path || "",
+      directory: msg.data.directory || "",
     };
     broadcastToPopup({ type: "downloadComplete", ...currentDownload });
+
+    // Create Chrome notification for download completion.
+    const notifId = "dl-complete-" + Date.now();
+    chrome.notifications.create(notifId, {
+      type: "basic",
+      title: "Download Complete",
+      message: currentDownload.filename || "Download finished",
+      iconUrl: "icons/icon128.png",
+    });
+
+    // Store directory for "Open Folder" on notification click.
+    if (currentDownload.directory) {
+      notificationDirs.set(notifId, currentDownload.directory);
+    }
 
     // Reset download state after 30 seconds.
     setTimeout(() => {
@@ -114,6 +135,15 @@ function handleNativeMessage(msg) {
       errorMessage: msg.data.message || "Unknown error",
     };
     broadcastToPopup({ type: "downloadError", ...currentDownload });
+    return;
+  }
+
+  // Formats response from companion.
+  if (msg.type === "formats" && msg.data) {
+    if (pendingFormatsCallback) {
+      pendingFormatsCallback(msg.data);
+      pendingFormatsCallback = null;
+    }
     return;
   }
 }
@@ -139,6 +169,17 @@ function stopHeartbeat() {
     heartbeatTimer = null;
   }
 }
+
+// --- Notification click handler ---
+
+chrome.notifications.onClicked.addListener((notifId) => {
+  const dir = notificationDirs.get(notifId);
+  if (dir) {
+    sendToHost({ type: "openFolder", data: { path: dir } });
+    notificationDirs.delete(notifId);
+  }
+  chrome.notifications.clear(notifId);
+});
 
 // --- Message listeners ---
 
@@ -181,6 +222,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true; // Will respond asynchronously.
   }
 
+  // Popup: get formats for a URL.
+  if (message.type === "getFormats") {
+    pendingFormatsCallback = (data) => {
+      sendResponse(data);
+    };
+    sendToHost({ type: "getFormats", data: { url: message.url } });
+
+    // Timeout after 30 seconds if companion doesn't respond.
+    setTimeout(() => {
+      if (pendingFormatsCallback) {
+        pendingFormatsCallback = null;
+        sendResponse({ error: "Format query timed out" });
+      }
+    }, 30000);
+
+    return true; // Will respond asynchronously.
+  }
+
   // Popup: start a download.
   if (message.type === "startDownload") {
     chrome.storage.local.get("downloadDirectory", (result) => {
@@ -195,13 +254,31 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         eta: "",
         filename: "",
       };
+
+      const downloadData = { url: message.url, directory: directory };
+
+      // Pass format options if provided.
+      if (message.formatId) downloadData.formatId = message.formatId;
+      if (message.audioOnly) downloadData.audioOnly = message.audioOnly;
+      if (message.audioFormat) downloadData.audioFormat = message.audioFormat;
+      if (message.embedMetadata !== undefined)
+        downloadData.embedMetadata = message.embedMetadata;
+      if (message.embedThumbnail !== undefined)
+        downloadData.embedThumbnail = message.embedThumbnail;
+
       sendToHost({
         type: "download",
-        data: { url: message.url, directory: directory },
+        data: downloadData,
       });
       sendResponse({ ok: true });
     });
     return true; // Will respond asynchronously.
+  }
+
+  // Popup: open folder.
+  if (message.type === "openFolder") {
+    sendToHost({ type: "openFolder", data: { path: message.path } });
+    return;
   }
 
   // Popup: get current download state (for reopening mid-download).

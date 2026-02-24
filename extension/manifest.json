@@ -3,7 +3,7 @@
   "name": "ytdlext",
   "version": "0.1.0",
   "description": "One-click video and audio downloads via yt-dlp",
-  "permissions": ["nativeMessaging", "activeTab", "storage"],
+  "permissions": ["nativeMessaging", "activeTab", "storage", "notifications"],
   "background": {
     "service_worker": "service-worker.js"
   },

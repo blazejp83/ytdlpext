@@ -11,7 +11,7 @@ body {
     Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   background: #f5f5f5;
   color: #333;
-  min-width: 350px;
+  min-width: 380px;
 }
 
 .container {
@@ -67,7 +67,171 @@ body {
   background-color: #e0e0e0;
 }
 
-/* --- Action --- */
+/* --- Tab Bar --- */
+
+.tab-bar {
+  display: flex;
+  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 12px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #888;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab:hover {
+  color: #555;
+}
+
+.tab.active {
+  color: #4a90d9;
+  border-bottom-color: #4a90d9;
+}
+
+/* --- Format List (Video) --- */
+
+.format-list {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.format-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.1s ease;
+}
+
+.format-row:last-child {
+  border-bottom: none;
+}
+
+.format-row:hover {
+  background-color: #f0f4fa;
+}
+
+.format-row.selected {
+  background-color: #e8f0fe;
+}
+
+.format-row input[type="radio"] {
+  margin-right: 10px;
+  accent-color: #4a90d9;
+}
+
+.format-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  min-width: 70px;
+}
+
+.format-detail {
+  font-size: 11px;
+  color: #888;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* --- Audio Format Chips --- */
+
+.audio-format-chips {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.chip {
+  flex: 1;
+  padding: 8px 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.chip:hover {
+  border-color: #4a90d9;
+  color: #4a90d9;
+}
+
+.chip.selected {
+  background: #4a90d9;
+  border-color: #4a90d9;
+  color: #fff;
+}
+
+/* --- Audio Options --- */
+
+.audio-options {
+  margin-bottom: 12px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+}
+
+.checkbox-row input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: #4a90d9;
+}
+
+/* --- Loading --- */
+
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 12px;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #4a90d9;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-size: 13px;
+  color: #888;
+}
+
+/* --- Action (Fallback) --- */
 
 .action {
   margin-bottom: 12px;
