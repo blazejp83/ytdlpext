@@ -14,7 +14,7 @@ None
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Foundation** - Companion + native messaging + one-click download with progress
+- [x] **Phase 1: Foundation** - Companion + native messaging + one-click download with progress
 - [ ] **Phase 2: Full Download Experience** - Format picker, audio extraction, metadata, notifications
 - [ ] **Phase 3: Site Integration + Enhancements** - Per-site buttons, YouTube features, advanced options
 
@@ -29,8 +29,8 @@ None
 **Plans**: TBD
 
 Plans:
-- [ ] 01-01: Native messaging + extension shell (Wave 1)
-- [ ] 01-02: Download pipeline + UI (Wave 2, depends: 01-01)
+- [x] 01-01: Native messaging + extension shell (Wave 1)
+- [x] 01-02: Download pipeline + UI (Wave 2, depends: 01-01)
 
 ### Phase 2: Full Download Experience
 **Goal**: Complete download pipeline with format/quality picker, audio extraction in multiple formats with metadata and cover art, automatic muxing, meaningful error messages, and download completion notifications
@@ -61,6 +61,6 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 2/2 | Complete | 2026-02-24 |
 | 2. Full Download Experience | 0/TBD | Not started | - |
 | 3. Site Integration + Enhancements | 0/TBD | Not started | - |

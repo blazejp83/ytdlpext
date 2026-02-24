@@ -9,13 +9,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Foundation
 
-- [ ] **FNDTN-01**: Go companion app communicates with extension via Chrome native messaging
-- [ ] **FNDTN-02**: Extension detects supported sites and shows badge/icon on toolbar
-- [ ] **FNDTN-03**: Extension supports YouTube, Vimeo, Pornhub, Bandcamp, and SoundCloud
+- [x] **FNDTN-01**: Go companion app communicates with extension via Chrome native messaging
+- [x] **FNDTN-02**: Extension detects supported sites and shows badge/icon on toolbar
+- [x] **FNDTN-03**: Extension supports YouTube, Vimeo, Pornhub, Bandcamp, and SoundCloud
 
 ### Download
 
-- [ ] **DL-01**: User can download best quality with one click (no config needed)
+- [x] **DL-01**: User can download best quality with one click (no config needed)
 - [ ] **DL-02**: User can pick video format/quality before downloading (resolution, codec, file size)
 - [ ] **DL-03**: Downloaded videos have audio and video merged automatically (no silent videos)
 - [ ] **DL-04**: Downloaded files are named after the video/track title
@@ -30,7 +30,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Progress & Notifications
 
-- [ ] **PROG-01**: User sees real-time progress bar with download speed and ETA
+- [x] **PROG-01**: User sees real-time progress bar with download speed and ETA
 - [ ] **PROG-02**: User receives Chrome notification when download completes
 - [ ] **PROG-03**: User can click notification to open the containing folder
 
@@ -43,7 +43,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Configuration
 
-- [ ] **CFG-01**: User can set download directory in extension settings
+- [x] **CFG-01**: User can set download directory in extension settings
 
 ### YouTube Enhancements
 
@@ -89,10 +89,10 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FNDTN-01 | Phase 1 | Pending |
-| FNDTN-02 | Phase 1 | Pending |
-| FNDTN-03 | Phase 1 | Pending |
-| DL-01 | Phase 1 | Pending |
+| FNDTN-01 | Phase 1 | Complete |
+| FNDTN-02 | Phase 1 | Complete |
+| FNDTN-03 | Phase 1 | Complete |
+| DL-01 | Phase 1 | Complete |
 | DL-02 | Phase 2 | Pending |
 | DL-03 | Phase 2 | Pending |
 | DL-04 | Phase 2 | Pending |
@@ -101,14 +101,14 @@ Which phases cover which requirements. Updated by create-roadmap.
 | AUDIO-02 | Phase 2 | Pending |
 | AUDIO-03 | Phase 2 | Pending |
 | AUDIO-04 | Phase 2 | Pending |
-| PROG-01 | Phase 1 | Pending |
+| PROG-01 | Phase 1 | Complete |
 | PROG-02 | Phase 2 | Pending |
 | PROG-03 | Phase 2 | Pending |
 | SITE-01 | Phase 3 | Pending |
 | SITE-02 | Phase 3 | Pending |
 | SITE-03 | Phase 3 | Pending |
 | SITE-04 | Phase 3 | Pending |
-| CFG-01 | Phase 1 | Pending |
+| CFG-01 | Phase 1 | Complete |
 | YT-01 | Phase 3 | Pending |
 | YT-02 | Phase 3 | Pending |
 | ADV-01 | Phase 3 | Pending |
@@ -122,4 +122,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after roadmap creation*
+*Last updated: 2026-02-24 after Phase 1 completion*
