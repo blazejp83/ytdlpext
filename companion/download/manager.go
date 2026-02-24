@@ -44,8 +44,6 @@ func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest)
 	}
 
 	cmd := ytdlp.New().
-		Format("bv*+ba/b").
-		FormatSort("res,ext:mp4:m4a").
 		Output("%(title)s.%(ext)s").
 		Paths(dir).
 		Progress().
@@ -62,6 +60,34 @@ func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest)
 				Filename:   filename,
 			})
 		})
+
+	if req.AudioOnly {
+		// Audio extraction mode.
+		cmd.ExtractAudio()
+		audioFmt := req.AudioFormat
+		if audioFmt == "" {
+			audioFmt = "mp3"
+		}
+		cmd.AudioFormat(audioFmt)
+		if audioFmt == "mp3" {
+			cmd.AudioQuality("0")
+		}
+	} else if req.FormatID != "" {
+		// Specific format selection with auto audio merge for video-only formats.
+		cmd.Format(req.FormatID + "+bestaudio/" + req.FormatID)
+		cmd.MergeOutputFormat("mp4")
+	} else {
+		// Default: best video+audio merged.
+		cmd.Format("bv*+ba/b")
+		cmd.FormatSort("res,ext:mp4:m4a")
+	}
+
+	if req.EmbedMetadata {
+		cmd.EmbedMetadata()
+	}
+	if req.EmbedThumbnail {
+		cmd.EmbedThumbnail()
+	}
 
 	result, err := cmd.Run(context.Background(), req.URL)
 	if err != nil {
@@ -81,10 +107,17 @@ func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest)
 		}
 	}
 
+	// Determine the directory from the resolved path, or fall back to configured dir.
+	outputDir := dir
+	if filename != "" {
+		outputDir = filepath.Dir(filename)
+	}
+
 	m.send(messaging.TypeComplete, &messaging.DownloadComplete{
 		DownloadID: downloadID,
 		Filename:   filepath.Base(filename),
 		Path:       filename,
+		Directory:  outputDir,
 	})
 }
 
@@ -142,10 +175,22 @@ func friendlyError(msg string) string {
 		return "Invalid URL"
 	case strings.Contains(lower, "unsupported url"):
 		return "This site or URL is not supported by yt-dlp"
+	case strings.Contains(lower, "ffmpeg") && (strings.Contains(lower, "audio") || strings.Contains(lower, "extract")):
+		return "ffmpeg is required for audio extraction. Install it: https://ffmpeg.org/download.html"
+	case strings.Contains(lower, "ffmpeg") && (strings.Contains(lower, "mux") || strings.Contains(lower, "merge")):
+		return "ffmpeg is required to merge video and audio. Install it: https://ffmpeg.org/download.html"
 	case strings.Contains(lower, "ffmpeg"):
-		return "ffmpeg is required but not found. Install ffmpeg to enable video+audio merging."
+		return "ffmpeg is required but not found. Install it: https://ffmpeg.org/download.html"
+	case strings.Contains(lower, "requested format") && strings.Contains(lower, "not available"):
+		return "The selected format is no longer available. Try refreshing formats."
 	case strings.Contains(lower, "sign in"), strings.Contains(lower, "age"):
 		return "This video requires authentication. Cookie support coming in a future update."
+	case strings.Contains(lower, "connection") || strings.Contains(lower, "network") ||
+		strings.Contains(lower, "timed out") || strings.Contains(lower, "unable to download"):
+		return "Network error \u2014 check your internet connection"
+	case strings.Contains(lower, "too many requests") || strings.Contains(lower, "429") ||
+		strings.Contains(lower, "rate limit"):
+		return "Too many requests \u2014 wait a moment and try again"
 	default:
 		return msg
 	}

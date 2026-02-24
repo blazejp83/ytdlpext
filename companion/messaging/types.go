@@ -24,8 +24,13 @@ type Message struct {
 
 // DownloadRequest is sent from the extension to start a download.
 type DownloadRequest struct {
-	URL       string `json:"url"`
-	Directory string `json:"directory"`
+	URL            string `json:"url"`
+	Directory      string `json:"directory"`
+	FormatID       string `json:"formatId,omitempty"`
+	AudioOnly      bool   `json:"audioOnly,omitempty"`
+	AudioFormat    string `json:"audioFormat,omitempty"`
+	EmbedMetadata  bool   `json:"embedMetadata,omitempty"`
+	EmbedThumbnail bool   `json:"embedThumbnail,omitempty"`
 }
 
 // ProgressUpdate is sent from the companion to report download progress.
@@ -42,6 +47,7 @@ type DownloadComplete struct {
 	DownloadID string `json:"downloadId"`
 	Filename   string `json:"filename"`
 	Path       string `json:"path"`
+	Directory  string `json:"directory"`
 }
 
 // ErrorResponse is sent when an error occurs.
