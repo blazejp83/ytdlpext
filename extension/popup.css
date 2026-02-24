@@ -18,8 +18,18 @@ body {
   padding: 16px;
 }
 
-.page-info {
+/* --- Header --- */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: 16px;
+}
+
+.page-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .page-title {
@@ -38,6 +48,26 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.settings-btn {
+  flex-shrink: 0;
+  margin-left: 8px;
+  padding: 4px 6px;
+  font-size: 16px;
+  color: #888;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.settings-btn:hover {
+  color: #333;
+  background-color: #e0e0e0;
+}
+
+/* --- Action --- */
 
 .action {
   margin-bottom: 12px;
@@ -70,17 +100,106 @@ body {
   cursor: not-allowed;
 }
 
-.status {
-  padding: 8px 12px;
+/* --- Progress --- */
+
+.progress-section {
+  padding: 12px;
   background: #e8f0fe;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #333;
+  border-radius: 6px;
 }
 
-.status-text {
+.progress-filename {
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4a90d9;
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #666;
+}
+
+.progress-pct {
+  font-weight: 600;
+}
+
+/* --- Complete --- */
+
+.complete-section {
+  text-align: center;
+  padding: 12px;
+}
+
+.complete-icon {
+  font-size: 32px;
+  color: #4caf50;
+  margin-bottom: 8px;
+}
+
+.complete-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.complete-filename {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Error --- */
+
+.error-section {
+  padding: 12px;
+}
+
+.error-text {
+  font-size: 13px;
+  color: #d32f2f;
+  margin-bottom: 12px;
   line-height: 1.4;
 }
+
+.retry-btn {
+  background-color: #d32f2f;
+}
+
+.retry-btn:hover {
+  background-color: #b71c1c;
+}
+
+.retry-btn:active {
+  background-color: #9a0000;
+}
+
+/* --- Unsupported --- */
 
 .unsupported {
   text-align: center;

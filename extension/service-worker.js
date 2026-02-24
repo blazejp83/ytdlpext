@@ -1,4 +1,4 @@
-// ytdlext service worker — manages native host connection and message routing.
+// ytdlext service worker — manages native host connection, download state, and message routing.
 
 const NATIVE_HOST = "com.ytdlext.companion";
 const MAX_RECONNECT_ATTEMPTS = 5;
@@ -11,6 +11,9 @@ let heartbeatTimer = null;
 
 // Page info keyed by tab ID.
 const pageInfo = new Map();
+
+// Active download state.
+let currentDownload = null;
 
 // --- Native host connection ---
 
@@ -27,13 +30,7 @@ function connectToHost() {
 
   port.onMessage.addListener((msg) => {
     reconnectAttempts = 0; // Reset on successful message exchange.
-
-    // Forward progress/complete/error messages to popup.
-    if (msg.type === "progress" || msg.type === "complete" || msg.type === "error") {
-      chrome.runtime.sendMessage(msg).catch(() => {
-        // Popup may be closed; ignore.
-      });
-    }
+    handleNativeMessage(msg);
   });
 
   port.onDisconnect.addListener(() => {
@@ -70,6 +67,61 @@ function sendToHost(message) {
   if (port !== null) {
     port.postMessage(message);
   }
+}
+
+// --- Native message handling ---
+
+function handleNativeMessage(msg) {
+  if (msg.type === "progress" && msg.data) {
+    currentDownload = {
+      ...currentDownload,
+      id: msg.data.downloadId || currentDownload?.id,
+      status: "downloading",
+      percentage: msg.data.percentage || 0,
+      speed: msg.data.speed || "",
+      eta: msg.data.eta || "",
+      filename: msg.data.filename || currentDownload?.filename || "",
+    };
+    broadcastToPopup({ type: "downloadProgress", ...currentDownload });
+    return;
+  }
+
+  if (msg.type === "complete" && msg.data) {
+    currentDownload = {
+      ...currentDownload,
+      id: msg.data.downloadId || currentDownload?.id,
+      status: "complete",
+      percentage: 100,
+      filename: msg.data.filename || currentDownload?.filename || "",
+      path: msg.data.path || "",
+    };
+    broadcastToPopup({ type: "downloadComplete", ...currentDownload });
+
+    // Reset download state after 30 seconds.
+    setTimeout(() => {
+      if (currentDownload?.status === "complete") {
+        currentDownload = null;
+      }
+    }, 30000);
+    return;
+  }
+
+  if (msg.type === "error" && msg.data) {
+    currentDownload = {
+      ...currentDownload,
+      id: msg.data.downloadId || currentDownload?.id,
+      status: "error",
+      errorMessage: msg.data.message || "Unknown error",
+    };
+    broadcastToPopup({ type: "downloadError", ...currentDownload });
+    return;
+  }
+}
+
+function broadcastToPopup(message) {
+  chrome.runtime.sendMessage(message).catch(() => {
+    // Popup may be closed; ignore.
+  });
 }
 
 // --- Heartbeat ---
@@ -131,11 +183,30 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Popup: start a download.
   if (message.type === "startDownload") {
-    sendToHost({
-      type: "download",
-      data: { url: message.url, directory: message.directory || "" },
+    chrome.storage.local.get("downloadDirectory", (result) => {
+      const directory = result.downloadDirectory || "~/Downloads";
+      currentDownload = {
+        id: null,
+        url: message.url,
+        title: message.title || "",
+        status: "starting",
+        percentage: 0,
+        speed: "",
+        eta: "",
+        filename: "",
+      };
+      sendToHost({
+        type: "download",
+        data: { url: message.url, directory: directory },
+      });
+      sendResponse({ ok: true });
     });
-    sendResponse({ ok: true });
+    return true; // Will respond asynchronously.
+  }
+
+  // Popup: get current download state (for reopening mid-download).
+  if (message.type === "getDownloadState") {
+    sendResponse({ download: currentDownload });
     return;
   }
 });

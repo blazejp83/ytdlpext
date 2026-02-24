@@ -8,18 +8,48 @@
   </head>
   <body>
     <div class="container">
-      <div class="page-info">
-        <div class="page-title" id="page-title">Loading...</div>
-        <div class="page-url" id="page-url"></div>
+      <div class="header">
+        <div class="page-info">
+          <div class="page-title" id="page-title">Loading...</div>
+          <div class="page-url" id="page-url"></div>
+        </div>
+        <button class="settings-btn" id="settings-btn" title="Settings">
+          &#9881;
+        </button>
       </div>
-      <div class="action" id="action-section">
+
+      <div class="action" id="action-section" hidden>
         <button class="download-btn" id="download-btn">
           Download Best Quality
         </button>
       </div>
-      <div class="status" id="status-section" hidden>
-        <div class="status-text" id="status-text"></div>
+
+      <div class="progress-section" id="progress-section" hidden>
+        <div class="progress-filename" id="progress-filename"></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-stats">
+          <span class="progress-pct" id="progress-pct">0%</span>
+          <span class="progress-speed" id="progress-speed"></span>
+          <span class="progress-eta" id="progress-eta"></span>
+        </div>
       </div>
+
+      <div class="complete-section" id="complete-section" hidden>
+        <div class="complete-icon">&#10003;</div>
+        <div class="complete-text">Download complete!</div>
+        <div class="complete-filename" id="complete-filename"></div>
+        <button class="download-btn" id="download-another-btn">
+          Download Another
+        </button>
+      </div>
+
+      <div class="error-section" id="error-section" hidden>
+        <div class="error-text" id="error-text"></div>
+        <button class="download-btn retry-btn" id="retry-btn">Retry</button>
+      </div>
+
       <div class="unsupported" id="unsupported-section" hidden>
         <div class="unsupported-text">Not a supported site</div>
       </div>
