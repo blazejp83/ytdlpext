@@ -1,16 +1,20 @@
-// ytdlext settings — download directory configuration.
+// ytdlext settings — download directory and preferences.
 
 document.addEventListener("DOMContentLoaded", () => {
   const downloadDir = document.getElementById("download-dir");
+  const fileExists = document.getElementById("file-exists");
   const saveBtn = document.getElementById("save-btn");
   const saveStatus = document.getElementById("save-status");
 
   let fadeTimer = null;
 
-  // Load saved directory on open.
-  chrome.storage.local.get("downloadDirectory", (result) => {
+  // Load saved settings on open.
+  chrome.storage.local.get(["downloadDirectory", "fileExists"], (result) => {
     if (result.downloadDirectory) {
       downloadDir.value = result.downloadDirectory;
+    }
+    if (result.fileExists) {
+      fileExists.value = result.fileExists;
     }
   });
 
@@ -22,7 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    chrome.storage.local.set({ downloadDirectory: value }, () => {
+    chrome.storage.local.set({
+      downloadDirectory: value,
+      fileExists: fileExists.value,
+    }, () => {
       // Show "Saved!" confirmation.
       saveStatus.classList.add("visible");
 

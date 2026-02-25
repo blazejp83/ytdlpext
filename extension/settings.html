@@ -49,7 +49,8 @@
         margin-bottom: 6px;
       }
 
-      .field input[type="text"] {
+      .field input[type="text"],
+      .field select {
         display: block;
         width: 100%;
         padding: 8px 12px;
@@ -62,7 +63,8 @@
         transition: border-color 0.15s ease;
       }
 
-      .field input[type="text"]:focus {
+      .field input[type="text"]:focus,
+      .field select:focus {
         border-color: #4a90d9;
         background: #fff;
       }
@@ -120,6 +122,17 @@
         />
         <div class="hint">
           Absolute path where downloaded files will be saved.
+        </div>
+      </div>
+      <div class="field">
+        <label for="file-exists">When file already exists</label>
+        <select id="file-exists">
+          <option value="overwrite">Overwrite</option>
+          <option value="rename">Rename (add number)</option>
+          <option value="skip">Skip (don't download)</option>
+        </select>
+        <div class="hint">
+          What to do when a file with the same name already exists.
         </div>
       </div>
       <button class="save-btn" id="save-btn">Save</button>
