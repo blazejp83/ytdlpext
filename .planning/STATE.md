@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 4 of 5 (New Site Support)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-02-25 - Milestone v1.1 created
+Plan: 01 complete
+Status: Phase 4 complete
+Last activity: 2026-02-25 - Added 4 new sites (ok.ru, cda.pl, xhamster, redgifs)
 
-Progress: ░░░░░░░░░░ 0%
+Progress: █████░░░░░ 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: ~5.5 min
-- Total execution time: ~0.5 hours
+- Total plans completed: 7
+- Average duration: ~5 min
+- Total execution time: ~0.55 hours
 
 **By Phase:**
 
@@ -30,12 +30,14 @@ Progress: ░░░░░░░░░░ 0%
 | 01-foundation | 2/2 | 16 min | 8 min |
 | 02-full-download | 2/2 | ~12 min | ~6 min |
 | 03-site-integration-enhancements | 2/2 | 9 min | ~4.5 min |
+| 04-new-site-support | 1/1 | 3 min | 3 min |
 
 ## Accumulated Context
 
 ### Decisions
 
 All decisions logged in PROJECT.md Key Decisions table with outcomes.
+- New sites (ok.ru, cda.pl, xhamster, redgifs) are popup-only — no injected download buttons
 
 ### Pending Todos
 
@@ -52,5 +54,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Milestone v1.1 initialization
+Stopped at: Phase 4 complete, Phase 5 next
 Resume file: None
