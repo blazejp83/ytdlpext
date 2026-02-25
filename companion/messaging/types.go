@@ -24,13 +24,18 @@ type Message struct {
 
 // DownloadRequest is sent from the extension to start a download.
 type DownloadRequest struct {
-	URL            string `json:"url"`
-	Directory      string `json:"directory"`
-	FormatID       string `json:"formatId,omitempty"`
-	AudioOnly      bool   `json:"audioOnly,omitempty"`
-	AudioFormat    string `json:"audioFormat,omitempty"`
-	EmbedMetadata  bool   `json:"embedMetadata,omitempty"`
-	EmbedThumbnail bool   `json:"embedThumbnail,omitempty"`
+	URL                string `json:"url"`
+	Directory          string `json:"directory"`
+	FormatID           string `json:"formatId,omitempty"`
+	AudioOnly          bool   `json:"audioOnly,omitempty"`
+	AudioFormat        string `json:"audioFormat,omitempty"`
+	EmbedMetadata      bool   `json:"embedMetadata,omitempty"`
+	EmbedThumbnail     bool   `json:"embedThumbnail,omitempty"`
+	FileExists         string `json:"fileExists,omitempty"` // "overwrite", "rename", or "skip"
+	SponsorBlockRemove string `json:"sponsorBlockRemove,omitempty"`
+	SubtitleLangs      string `json:"subtitleLangs,omitempty"`
+	EmbedSubs          bool   `json:"embedSubs,omitempty"`
+	UseBrowserCookies  bool   `json:"useBrowserCookies,omitempty"`
 }
 
 // ProgressUpdate is sent from the companion to report download progress.
@@ -61,13 +66,21 @@ type GetFormatsRequest struct {
 	URL string `json:"url"`
 }
 
+// SubtitleLang describes an available subtitle language.
+type SubtitleLang struct {
+	Code string `json:"code"`
+	Name string `json:"name"`
+	Auto bool   `json:"auto"` // true if auto-generated caption
+}
+
 // FormatsResponse is sent back to the extension with available formats.
 type FormatsResponse struct {
-	Title        string        `json:"title"`
-	Duration     float64       `json:"duration"`
-	Thumbnail    string        `json:"thumbnail"`
-	VideoFormats []VideoFormat `json:"videoFormats"`
-	AudioFormats []AudioFormat `json:"audioFormats"`
+	Title        string         `json:"title"`
+	Duration     float64        `json:"duration"`
+	Thumbnail    string         `json:"thumbnail"`
+	VideoFormats []VideoFormat  `json:"videoFormats"`
+	AudioFormats []AudioFormat  `json:"audioFormats"`
+	Subtitles    []SubtitleLang `json:"subtitles,omitempty"`
 }
 
 // VideoFormat describes a single video format option.

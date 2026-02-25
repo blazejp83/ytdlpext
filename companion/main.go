@@ -27,8 +27,14 @@ import (
 var writeMu sync.Mutex
 
 func main() {
-	// All logging goes to stderr; stdout is reserved for native messaging.
-	log.SetOutput(os.Stderr)
+	// Log to a file in the user's temp directory for debugging native messaging issues.
+	logPath := filepath.Join(os.TempDir(), "ytdlext-companion.log")
+	if logFile, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644); err == nil {
+		log.SetOutput(logFile)
+	} else {
+		log.SetOutput(os.Stderr)
+	}
+
 	log.Println("ytdlext companion started")
 
 	// Check for yt-dlp availability on startup.
@@ -152,8 +158,22 @@ func handleGetFormats(req messaging.GetFormatsRequest) {
 	}
 
 	// Separate video and audio formats.
+	log.Printf("getFormats: total raw formats from yt-dlp: %d", len(info.Formats))
 	for _, f := range info.Formats {
 		if f.FormatID == nil {
+			continue
+		}
+
+		fid := *f.FormatID
+		protocol := ""
+		if f.Protocol != nil {
+			protocol = *f.Protocol
+		}
+
+		// Skip formats with compound format IDs (e.g., "301-0") that break
+		// yt-dlp format selection syntax. These are typically YouTube HLS duplicates.
+		if strings.Contains(fid, "-") {
+			log.Printf("getFormats: skip %s (compound ID), protocol=%s", fid, protocol)
 			continue
 		}
 
@@ -176,7 +196,11 @@ func handleGetFormats(req messaging.GetFormatsRequest) {
 		if f.FormatNote != nil {
 			formatNote = *f.FormatNote
 		}
+
+		log.Printf("getFormats: id=%s vcodec=%s acodec=%s height=%d note=%s protocol=%s", fid, vcodec, acodec, height, formatNote, protocol)
+
 		if height <= 0 && vcodec != "" && vcodec != "none" {
+			log.Printf("getFormats: skip %s (no height, has vcodec)", fid)
 			continue // No height means storyboard or invalid
 		}
 		if strings.Contains(strings.ToLower(formatNote), "storyboard") {
@@ -191,7 +215,7 @@ func handleGetFormats(req messaging.GetFormatsRequest) {
 			filesize = int64(*f.FileSizeApprox)
 		}
 
-		if vcodec != "" && vcodec != "none" {
+		if (vcodec != "" && vcodec != "none") || (height > 0 && (vcodec == "" || vcodec == "none")) {
 			// Video format.
 			width := 0
 			if f.Width != nil {
@@ -261,6 +285,43 @@ func handleGetFormats(req messaging.GetFormatsRequest) {
 	// Sort audio formats: abr desc.
 	sort.Slice(resp.AudioFormats, func(i, j int) bool {
 		return resp.AudioFormats[i].ABR > resp.AudioFormats[j].ABR
+	})
+
+	// Extract available subtitle languages.
+	subtitleCodes := make(map[string]bool)
+	if info.Subtitles != nil {
+		for code, subs := range info.Subtitles {
+			name := code
+			if len(subs) > 0 && subs[0].Name != nil {
+				name = *subs[0].Name
+			}
+			resp.Subtitles = append(resp.Subtitles, messaging.SubtitleLang{
+				Code: code,
+				Name: name,
+				Auto: false,
+			})
+			subtitleCodes[code] = true
+		}
+	}
+	if info.AutomaticCaptions != nil {
+		for code, subs := range info.AutomaticCaptions {
+			if subtitleCodes[code] {
+				continue // Skip if already in manual subtitles.
+			}
+			name := code
+			if len(subs) > 0 && subs[0].Name != nil {
+				name = *subs[0].Name
+			}
+			resp.Subtitles = append(resp.Subtitles, messaging.SubtitleLang{
+				Code: code,
+				Name: name,
+				Auto: true,
+			})
+		}
+	}
+	// Sort subtitles by code alphabetically.
+	sort.Slice(resp.Subtitles, func(i, j int) bool {
+		return resp.Subtitles[i].Code < resp.Subtitles[j].Code
 	})
 
 	_ = sendResponse(messaging.TypeFormats, &resp)

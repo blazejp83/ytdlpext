@@ -3,8 +3,10 @@ package download
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -43,11 +45,23 @@ func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest)
 		}
 	}
 
+	outputTmpl := "%(title)s.%(ext)s"
+
+	// Handle file-exists policy for rename: find next available counter.
+	if req.FileExists == "rename" {
+		if n := findNextCounter(dir); n > 0 {
+			outputTmpl = fmt.Sprintf("%%(title)s (%d).%%(ext)s", n)
+		}
+	}
+
+	var progressSeen bool
+
 	cmd := ytdlp.New().
-		Output("%(title)s.%(ext)s").
+		Output(outputTmpl).
 		Paths(dir).
 		Progress().
 		ProgressFunc(500*time.Millisecond, func(update ytdlp.ProgressUpdate) {
+			progressSeen = true
 			speed := humanizeBytes(m.calcSpeed(update)) + "/s"
 			eta := formatETA(update.ETA())
 			filename := filepath.Base(update.Filename)
@@ -73,13 +87,20 @@ func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest)
 			cmd.AudioQuality("0")
 		}
 	} else if req.FormatID != "" {
-		// Specific format selection with auto audio merge for video-only formats.
-		cmd.Format(req.FormatID + "+bestaudio/" + req.FormatID)
-		cmd.MergeOutputFormat("mp4")
+		// Specific format selection with original audio merge.
+		formatStr := req.FormatID + "+ba[language_preference>=10]/" +
+			req.FormatID + "+bestaudio/" + req.FormatID
+		log.Printf("download format string: %s", formatStr)
+		cmd.Format(formatStr)
+		cmd.MergeOutputFormat("mp4/mkv") // MP4 if compatible, MKV otherwise.
 	} else {
-		// Default: best video+audio merged.
-		cmd.Format("bv*+ba/b")
-		cmd.FormatSort("res,ext:mp4:m4a")
+		// Default: best video + original audio merged.
+		// ext:mp4:m4a prefers AVC+AAC where available, VP9+Opus for higher res.
+		formatStr := "bv*+ba[language_preference>=10]/bv*+ba/b"
+		log.Printf("download format string: %s", formatStr)
+		cmd.Format(formatStr)
+		cmd.MergeOutputFormat("mp4/mkv") // MP4 if compatible, MKV otherwise.
+		cmd.FormatSort("lang,res,ext:mp4:m4a")
 	}
 
 	if req.EmbedMetadata {
@@ -89,11 +110,51 @@ func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest)
 		cmd.EmbedThumbnail()
 	}
 
+	if req.SponsorBlockRemove != "" {
+		cmd.SponsorblockRemove(req.SponsorBlockRemove)
+	}
+
+	if req.SubtitleLangs != "" {
+		cmd.WriteSubs()
+		cmd.SubLangs(req.SubtitleLangs)
+		if req.EmbedSubs {
+			cmd.EmbedSubs()
+		}
+	}
+
+	if req.UseBrowserCookies {
+		browser := "chrome"
+		if runtime.GOOS == "linux" {
+			browser = "chromium"
+		}
+		cmd.CookiesFromBrowser(browser)
+	}
+
+	// Apply file-exists policy flags.
+	switch req.FileExists {
+	case "skip":
+		cmd.NoOverwrites()
+	case "rename":
+		cmd.ForceOverwrites()
+	default: // "overwrite" or empty
+		cmd.ForceOverwrites()
+	}
+
 	result, err := cmd.Run(context.Background(), req.URL)
 	if err != nil {
+		log.Printf("yt-dlp error for %s: %v", req.URL, err)
 		m.send(messaging.TypeError, &messaging.ErrorResponse{
 			DownloadID: downloadID,
 			Message:    friendlyError(err.Error()),
+		})
+		return
+	}
+
+	// If skip mode and no progress was reported, the file already existed.
+	if req.FileExists == "skip" && !progressSeen {
+		m.send(messaging.TypeError, &messaging.ErrorResponse{
+			DownloadID: downloadID,
+			Message:    "File already exists — skipped (change in Settings)",
 		})
 		return
 	}
@@ -119,6 +180,40 @@ func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest)
 		Path:       filename,
 		Directory:  outputDir,
 	})
+}
+
+// findNextCounter scans the download directory for files with counter suffixes
+// like "title (1).ext" and returns the next available counter. Returns 0 if no
+// files exist (no rename needed).
+func findNextCounter(dir string) int {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return 0
+	}
+
+	maxCounter := 0
+	for _, e := range entries {
+		name := e.Name()
+		// Look for " (N)" pattern before the extension.
+		idx := strings.LastIndex(name, " (")
+		if idx < 0 {
+			continue
+		}
+		rest := name[idx+2:]
+		endIdx := strings.Index(rest, ")")
+		if endIdx < 0 {
+			continue
+		}
+		var n int
+		if _, err := fmt.Sscanf(rest[:endIdx], "%d", &n); err == nil && n > maxCounter {
+			maxCounter = n
+		}
+	}
+	if maxCounter > 0 {
+		return maxCounter + 1
+	}
+	// No counter files exist, but we're in rename mode so file likely exists.
+	return 1
 }
 
 func (m *Manager) send(msgType string, data interface{}) {
@@ -184,7 +279,7 @@ func friendlyError(msg string) string {
 	case strings.Contains(lower, "requested format") && strings.Contains(lower, "not available"):
 		return "The selected format is no longer available. Try refreshing formats."
 	case strings.Contains(lower, "sign in"), strings.Contains(lower, "age"):
-		return "This video requires authentication. Cookie support coming in a future update."
+		return "This video requires authentication. Try enabling 'Use browser cookies' in the extension and make sure you're logged in on the site."
 	case strings.Contains(lower, "connection") || strings.Contains(lower, "network") ||
 		strings.Contains(lower, "timed out") || strings.Contains(lower, "unable to download"):
 		return "Network error \u2014 check your internet connection"
