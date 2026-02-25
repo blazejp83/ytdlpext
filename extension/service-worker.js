@@ -144,6 +144,8 @@ function handleNativeMessage(msg) {
       id: msg.data.downloadId || currentDownload?.id,
       status: "complete",
       percentage: 100,
+      url: msg.data.url || currentDownload?.url || "",
+      title: msg.data.title || currentDownload?.title || "",
       filename: msg.data.filename || currentDownload?.filename || "",
       path: msg.data.path || "",
       directory: msg.data.directory || "",
@@ -186,6 +188,13 @@ function handleNativeMessage(msg) {
         currentDownload = null;
       }
     }, 30000);
+    return;
+  }
+
+  if (msg.type === "cancelled") {
+    currentDownload = null;
+    broadcastToPopup({ type: "downloadCancelled" });
+    resetDownloadBadge();
     return;
   }
 
@@ -396,6 +405,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "openFolder") {
     sendToHost({ type: "openFolder", data: { path: message.path } });
     return;
+  }
+
+  // Popup: cancel the current download.
+  if (message.type === "cancelDownload") {
+    sendToHost({ type: "cancelAll" });
+    currentDownload = null;
+    resetDownloadBadge();
+    sendResponse({ ok: true });
+    return true;
   }
 
   // Popup: get current download state (for reopening mid-download).
