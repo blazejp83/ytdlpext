@@ -2,17 +2,17 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24)
+See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** One-click download from the browser -- no copying URLs, no switching to a terminal.
-**Current focus:** PROJECT COMPLETE -- All 3 phases finished
+**Current focus:** v1.0 shipped — planning next milestone
 
 ## Current Position
 
-Phase: 3 of 3 (Site Integration + Enhancements) -- COMPLETE
-Plan: 03-02 complete (popup UI controls, download history, keyboard shortcut)
-Status: All phases and plans complete
-Last activity: 2026-02-25 -- Plan 03-02 complete
+Phase: 3 of 3 (all complete)
+Plan: All plans complete
+Status: v1.0 MVP shipped
+Last activity: 2026-02-25 -- v1.0 milestone complete
 
 Progress: ########## 100%
 
@@ -31,41 +31,11 @@ Progress: ########## 100%
 | 02-full-download | 2/2 | ~12 min | ~6 min |
 | 03-site-integration-enhancements | 2/2 | 9 min | ~4.5 min |
 
-**Recent Trend:**
-- Last 5 plans: 02-01 (6 min), 02-02 (~6 min), 03-01 (5 min), 03-02 (4 min)
-- Trend: Accelerating, ~4-5 min
-
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-All decisions from the project:
-
-- Go module name: `ytdlext-companion`
-- Native messaging: 4-byte LE uint32 length prefix + JSON body
-- Message envelope: `Type` string for routing, `Data` as json.RawMessage for deferred unmarshal
-- Service worker heartbeat: 25s interval to keep alive during downloads
-- Reconnect logic: max 5 attempts, 1s delay, reset on success
-- Content script SPA detection: YouTube `yt-navigate-finish` + Navigation API + popstate/hashchange fallback
-- go-ytdlp (lrstanley/go-ytdlp) as yt-dlp Go binding library
-- 500ms progress update frequency for smooth UI without overhead
-- sync.Mutex for stdout serialization across download goroutines
-- Download directory defaults to ~/Downloads, persisted in chrome.storage.local
-- yt-dlp availability check on startup via exec.LookPath
-- DumpJSON() for format querying (returns per-URL JSON with formats array)
-- Video format deduplication: same height+fps keeps h264/avc for compatibility
-- Audio quality: AudioQuality("0") for MP3 best VBR, omit for lossless
-- Format merge: FormatID+bestaudio/FormatID with MergeOutputFormat(mp4)
-- Platform folder open: xdg-open (Linux), open (macOS), explorer (Windows)
-- CookiesFromBrowser: "chrome" on macOS/Windows, "chromium" on Linux (runtime.GOOS)
-- SubtitleLang type with Auto bool for manual vs auto-generated distinction
-- Per-site button injection via MutationObserver (YouTube #owner, SoundCloud .soundActions, Bandcamp .tralbumCommands)
-- quickDownload message type: content script -> service worker -> native host, bypassing popup
-- Orange "DL..." badge for active quick downloads, reset to blue "DL" on complete/error
-- YouTube-specific options shown only when hostname includes youtube.com
-- Download history capped at 50 entries in chrome.storage.local
-- Keyboard shortcut Ctrl+Shift+D (Cmd+Shift+D on Mac) via chrome.commands API
+All decisions logged in PROJECT.md Key Decisions table with outcomes.
 
 ### Pending Todos
 
@@ -78,5 +48,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Project complete -- all 3 phases finished
-Resume file: .planning/phases/03-site-integration-enhancements/03-02-SUMMARY.md
+Stopped at: v1.0 milestone complete
+Resume file: .planning/MILESTONES.md

@@ -8,59 +8,32 @@ Build a Chrome extension + Go companion app that enables one-click video/audio d
 
 None
 
+## Milestones
+
+- ✅ **v1.0 MVP** — Phases 1-3 (shipped 2026-02-25)
+
+## Completed Milestones
+
+- ✅ [v1.0 MVP](milestones/v1.0-ROADMAP.md) (Phases 1-3) — SHIPPED 2026-02-25
+
 ## Phases
 
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+<details>
+<summary>✅ v1.0 MVP (Phases 1-3) — SHIPPED 2026-02-25</summary>
 
-- [x] **Phase 1: Foundation** - Companion + native messaging + one-click download with progress
-- [x] **Phase 2: Full Download Experience** - Format picker, audio extraction, metadata, notifications
-- [x] **Phase 3: Site Integration + Enhancements** - Per-site buttons, YouTube features, advanced options
+- [x] Phase 1: Foundation (2/2 plans) — completed 2026-02-24
+- [x] Phase 2: Full Download Experience (2/2 plans) — completed 2026-02-25
+- [x] Phase 3: Site Integration + Enhancements (2/2 plans) — completed 2026-02-25
 
-## Phase Details
-
-### Phase 1: Foundation
-**Goal**: Working extension ↔ Go companion communication via native messaging, with one-click best-quality download, real-time progress, and configurable download directory
-**Depends on**: Nothing (first phase)
-**Requirements**: FNDTN-01, FNDTN-02, FNDTN-03, DL-01, PROG-01, CFG-01
-**Research**: Likely (native messaging protocol, MV3 service worker lifecycle)
-**Research topics**: Chrome native messaging setup and keepalive patterns, MV3 service worker lifecycle management, go-ytdlp in native host context, heartbeat protocol design
-**Plans**: TBD
-
-Plans:
-- [x] 01-01: Native messaging + extension shell (Wave 1)
-- [x] 01-02: Download pipeline + UI (Wave 2, depends: 01-01)
-
-### Phase 2: Full Download Experience
-**Goal**: Complete download pipeline with format/quality picker, audio extraction in multiple formats with metadata and cover art, automatic muxing, meaningful error messages, and download completion notifications
-**Depends on**: Phase 1
-**Requirements**: DL-02, DL-03, DL-04, DL-05, AUDIO-01, AUDIO-02, AUDIO-03, AUDIO-04, PROG-02, PROG-03
-**Research**: Unlikely (yt-dlp well-documented, go-ytdlp handles complexity)
-**Plans**: 2 plans, 2 waves
-
-Plans:
-- [x] 02-01: Go companion - format query, download options, error enhancement (Wave 1)
-- [x] 02-02: Extension UI - format picker, audio options, notifications (Wave 2, depends: 02-01)
-
-### Phase 3: Site Integration + Enhancements
-**Goal**: Per-site download button injection on all 5 sites, audio-primary UI for Bandcamp/SoundCloud, SponsorBlock and subtitle support for YouTube, cookie-based auth for age-restricted content, download history, and keyboard shortcut
-**Depends on**: Phase 2
-**Requirements**: SITE-01, SITE-02, SITE-03, SITE-04, YT-01, YT-02, ADV-01, ADV-02, ADV-03
-**Research**: Unlikely (content script injection is standard, yt-dlp CLI flags well-documented)
-**Plans**: 2 plans, 2 waves
-
-Plans:
-- [x] 03-01: Go companion SponsorBlock/subtitles/cookies + per-site download buttons (Wave 1)
-- [x] 03-02: Popup UI controls, download history, keyboard shortcut (Wave 2, depends: 03-01)
+</details>
 
 ## Progress
 
 **Execution Order:**
 Phases execute in numeric order: 1 → 2 → 3
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation | 2/2 | Complete | 2026-02-24 |
-| 2. Full Download Experience | 2/2 | Complete | 2026-02-25 |
-| 3. Site Integration + Enhancements | 2/2 | Complete | 2026-02-25 |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Foundation | v1.0 | 2/2 | Complete | 2026-02-24 |
+| 2. Full Download Experience | v1.0 | 2/2 | Complete | 2026-02-25 |
+| 3. Site Integration + Enhancements | v1.0 | 2/2 | Complete | 2026-02-25 |
