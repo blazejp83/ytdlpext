@@ -208,6 +208,26 @@ document.addEventListener("DOMContentLoaded", () => {
       opt.textContent = sub.auto ? sub.name + " (auto)" : sub.name;
       subtitleLangSelect.appendChild(opt);
     });
+
+    // Restore last chosen video resolution (if available for this video).
+    chrome.storage.local.get(["lastVideoResolution"], (result) => {
+      const lastRes = result.lastVideoResolution;
+      if (!lastRes) return;
+
+      const rows = formatList.querySelectorAll(".format-row");
+      for (const row of rows) {
+        const label = row.querySelector(".format-label");
+        if (label && label.textContent === lastRes) {
+          const radio = row.querySelector('input[name="video-format"]');
+          if (radio) {
+            radio.checked = true;
+            rows.forEach((r) => r.classList.remove("selected"));
+            row.classList.add("selected");
+          }
+          break;
+        }
+      }
+    });
   }
 
   // Format file size for display.
@@ -251,6 +271,16 @@ document.addEventListener("DOMContentLoaded", () => {
       'input[name="video-format"]:checked'
     );
     const formatId = selected ? selected.value : "";
+
+    // Persist last chosen resolution (skip "Best Quality" which has empty value).
+    if (formatId && selected) {
+      const row = selected.closest(".format-row");
+      const label = row ? row.querySelector(".format-label") : null;
+      if (label) {
+        chrome.storage.local.set({ lastVideoResolution: label.textContent });
+      }
+    }
+
     startDownload({ formatId });
   });
 
