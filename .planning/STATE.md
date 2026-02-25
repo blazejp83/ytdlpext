@@ -41,7 +41,7 @@ All decisions logged in PROJECT.md Key Decisions table with outcomes.
 
 ### Pending Todos
 
-None.
+1. Cache formats on popup navigation (ui) — `.planning/todos/pending/2026-02-25-cache-formats-on-popup-navigation.md`
 
 ### Blockers/Concerns
 
