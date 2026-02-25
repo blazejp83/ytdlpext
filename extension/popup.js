@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const errorSection = document.getElementById("error-section");
   const errorText = document.getElementById("error-text");
   const retryBtn = document.getElementById("retry-btn");
+  const cancelBtn = document.getElementById("cancel-btn");
   const unsupportedSection = document.getElementById("unsupported-section");
   const settingsBtn = document.getElementById("settings-btn");
   const historyLink = document.getElementById("history-link");
@@ -256,6 +257,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Retry button click handler.
   retryBtn.addEventListener("click", () => startDownload(lastDownloadOptions));
 
+  // Cancel button click handler.
+  cancelBtn.addEventListener("click", () => {
+    chrome.runtime.sendMessage({ type: "cancelDownload" }, () => {
+      hideAll();
+      loadFormats();
+    });
+  });
+
   // Download another button click handler.
   downloadAnotherBtn.addEventListener("click", () => {
     loadFormats();
@@ -369,6 +378,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (message.type === "downloadError") {
       showError(message.errorMessage || "Unknown error");
+    }
+
+    if (message.type === "downloadCancelled") {
+      hideAll();
+      loadFormats();
     }
   });
 
