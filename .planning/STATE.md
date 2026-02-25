@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 
 ## Current Position
 
-Phase: 6 of 8 (Format UX)
+Phase: 7 of 8 (Download Completion UX)
 Plan: 01 complete
-Status: Plan 06-01 executed
-Last activity: 2026-02-25 — Format cache + resolution memory
+Status: Plan 07-01 executed
+Last activity: 2026-02-25 — Auto-close countdown on download complete
 
-Progress: ###....... 33%
+Progress: ######.... 67%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: ~4.4 min
-- Total execution time: ~0.7 hours
+- Total plans completed: 11
+- Average duration: ~4.3 min
+- Total execution time: ~0.8 hours
 
 **By Phase:**
 
@@ -32,7 +32,8 @@ Progress: ###....... 33%
 | 03-site-integration-enhancements | 2/2 | 9 min | ~4.5 min |
 | 04-new-site-support | 1/1 | 3 min | 3 min |
 | 05-cancel-fix-history | 2/2 | ~6 min | ~3 min |
-| 06-format-ux | 1/? | ~4 min | ~4 min |
+| 06-format-ux | 1/1 | ~4 min | ~4 min |
+| 07-download-completion-ux | 1/1 | ~3 min | ~3 min |
 
 ## Accumulated Context
 
@@ -43,12 +44,13 @@ All decisions logged in PROJECT.md Key Decisions table with outcomes.
 - Format cache: JS variable scoped to popup lifetime, not chrome.storage (format data is large/stale)
 - Resolution matching: by label text not format ID (IDs vary across videos)
 - Only video resolution persisted, not audio format (MP3 default is sensible)
+- Auto-close: 5-second countdown, timer cleared in hideAll() for safety
 
 ### Pending Todos
 
 1. ~~Cache formats on popup navigation (ui)~~ -- Done in 06-01
 2. ~~Remember last format choice (ui)~~ -- Done in 06-01
-3. Auto-close popup after download completes (ui) -- `.planning/todos/pending/2026-02-25-auto-close-popup-after-download.md`
+3. ~~Auto-close popup after download completes (ui)~~ -- Done in 07-01
 4. Fix history missing video titles (ui) -- `.planning/todos/pending/2026-02-25-fix-history-missing-video-titles.md`
 
 ### Blockers/Concerns
@@ -64,5 +66,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Phase 06, plan 01 complete
+Stopped at: Phase 07, plan 01 complete
 Resume file: None

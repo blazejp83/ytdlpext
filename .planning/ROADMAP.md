@@ -60,7 +60,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 07-01: TBD
+- [x] 07-01: Auto-close countdown on download complete
 
 #### Phase 8: History Title Fix
 
@@ -81,6 +81,6 @@ Plans:
 | 3. Site Integration + Enhancements | v1.0 | 2/2 | Complete | 2026-02-25 |
 | 4. New Site Support | v1.1 | 1/1 | Complete | 2026-02-25 |
 | 5. Cancel Downloads + Fix History | v1.1 | 2/2 | Complete | 2026-02-25 |
-| 6. Format UX | v1.2 | 0/? | Not started | - |
-| 7. Download Completion UX | v1.2 | 0/? | Not started | - |
+| 6. Format UX | v1.2 | 1/1 | Complete | 2026-02-25 |
+| 7. Download Completion UX | v1.2 | 1/1 | Complete | 2026-02-25 |
 | 8. History Title Fix | v1.2 | 0/? | Not started | - |
