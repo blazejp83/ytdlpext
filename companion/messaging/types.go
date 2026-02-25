@@ -13,6 +13,8 @@ const (
 	TypeGetFormats = "getFormats"
 	TypeFormats    = "formats"
 	TypeOpenFolder = "openFolder"
+	TypeCancelAll  = "cancelAll"
+	TypeCancelled  = "cancelled"
 )
 
 // Message is the top-level envelope for all native messaging communication.
@@ -104,6 +106,11 @@ type AudioFormat struct {
 	ABR      float64 `json:"abr"`
 	ACodec   string  `json:"acodec"`
 	Filesize int64   `json:"filesize"`
+}
+
+// CancelledResponse is sent when a download is cancelled via cancelAll.
+type CancelledResponse struct {
+	DownloadID string `json:"downloadId"`
 }
 
 // OpenFolderRequest is sent from the extension to open a directory in the file manager.

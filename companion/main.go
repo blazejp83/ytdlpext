@@ -93,6 +93,10 @@ func handleMessage(msg *messaging.Message, manager *download.Manager) error {
 		go handleGetFormats(req)
 		return nil
 
+	case messaging.TypeCancelAll:
+		manager.CancelAll()
+		return nil
+
 	case messaging.TypeOpenFolder:
 		var req messaging.OpenFolderRequest
 		if err := json.Unmarshal(msg.Data, &req); err != nil {

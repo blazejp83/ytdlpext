@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/lrstanley/go-ytdlp"
@@ -18,11 +19,16 @@ import (
 // Manager handles yt-dlp downloads and streams progress back via native messaging.
 type Manager struct {
 	messageWriter func(*messaging.Message)
+	mu            sync.Mutex
+	active        map[string]context.CancelFunc
 }
 
 // NewManager creates a Manager that sends messages through the provided callback.
 func NewManager(writer func(*messaging.Message)) *Manager {
-	return &Manager{messageWriter: writer}
+	return &Manager{
+		messageWriter: writer,
+		active:        make(map[string]context.CancelFunc),
+	}
 }
 
 // StartDownload runs a yt-dlp download in a goroutine. It streams progress
@@ -30,10 +36,31 @@ func NewManager(writer func(*messaging.Message)) *Manager {
 func (m *Manager) StartDownload(req *messaging.DownloadRequest) {
 	downloadID := fmt.Sprintf("dl-%d", time.Now().UnixNano())
 
-	go m.runDownload(downloadID, req)
+	ctx, cancel := context.WithCancel(context.Background())
+	m.mu.Lock()
+	m.active[downloadID] = cancel
+	m.mu.Unlock()
+
+	go m.runDownload(ctx, downloadID, req)
 }
 
-func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest) {
+// CancelAll cancels all active downloads.
+func (m *Manager) CancelAll() {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	for _, cancel := range m.active {
+		cancel()
+	}
+	m.active = make(map[string]context.CancelFunc)
+}
+
+func (m *Manager) runDownload(ctx context.Context, downloadID string, req *messaging.DownloadRequest) {
+	defer func() {
+		m.mu.Lock()
+		delete(m.active, downloadID)
+		m.mu.Unlock()
+	}()
+
 	dir := req.Directory
 	if dir == "" {
 		dir = "~/Downloads"
@@ -140,8 +167,15 @@ func (m *Manager) runDownload(downloadID string, req *messaging.DownloadRequest)
 		cmd.ForceOverwrites()
 	}
 
-	result, err := cmd.Run(context.Background(), req.URL)
+	result, err := cmd.Run(ctx, req.URL)
 	if err != nil {
+		if ctx.Err() == context.Canceled {
+			log.Printf("download cancelled for %s", req.URL)
+			m.send(messaging.TypeCancelled, &messaging.CancelledResponse{
+				DownloadID: downloadID,
+			})
+			return
+		}
 		log.Printf("yt-dlp error for %s: %v", req.URL, err)
 		m.send(messaging.TypeError, &messaging.ErrorResponse{
 			DownloadID: downloadID,
