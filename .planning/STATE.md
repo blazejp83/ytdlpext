@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 ## Current Position
 
 Phase: 6 of 8 (Format UX)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-02-25 — Milestone v1.2 created
+Plan: 01 complete
+Status: Plan 06-01 executed
+Last activity: 2026-02-25 — Format cache + resolution memory
 
-Progress: ░░░░░░░░░░ 0%
+Progress: ###....... 33%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: ~4.5 min
-- Total execution time: ~0.6 hours
+- Total plans completed: 10
+- Average duration: ~4.4 min
+- Total execution time: ~0.7 hours
 
 **By Phase:**
 
@@ -32,6 +32,7 @@ Progress: ░░░░░░░░░░ 0%
 | 03-site-integration-enhancements | 2/2 | 9 min | ~4.5 min |
 | 04-new-site-support | 1/1 | 3 min | 3 min |
 | 05-cancel-fix-history | 2/2 | ~6 min | ~3 min |
+| 06-format-ux | 1/? | ~4 min | ~4 min |
 
 ## Accumulated Context
 
@@ -39,12 +40,16 @@ Progress: ░░░░░░░░░░ 0%
 
 All decisions logged in PROJECT.md Key Decisions table with outcomes.
 
+- Format cache: JS variable scoped to popup lifetime, not chrome.storage (format data is large/stale)
+- Resolution matching: by label text not format ID (IDs vary across videos)
+- Only video resolution persisted, not audio format (MP3 default is sensible)
+
 ### Pending Todos
 
-1. Cache formats on popup navigation (ui) — `.planning/todos/pending/2026-02-25-cache-formats-on-popup-navigation.md`
-2. Remember last format choice (ui) — `.planning/todos/pending/2026-02-25-remember-last-format-choice.md`
-3. Auto-close popup after download completes (ui) — `.planning/todos/pending/2026-02-25-auto-close-popup-after-download.md`
-4. Fix history missing video titles (ui) — `.planning/todos/pending/2026-02-25-fix-history-missing-video-titles.md`
+1. ~~Cache formats on popup navigation (ui)~~ -- Done in 06-01
+2. ~~Remember last format choice (ui)~~ -- Done in 06-01
+3. Auto-close popup after download completes (ui) -- `.planning/todos/pending/2026-02-25-auto-close-popup-after-download.md`
+4. Fix history missing video titles (ui) -- `.planning/todos/pending/2026-02-25-fix-history-missing-video-titles.md`
 
 ### Blockers/Concerns
 
@@ -59,5 +64,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Milestone v1.2 initialization
+Stopped at: Phase 06, plan 01 complete
 Resume file: None
