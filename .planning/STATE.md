@@ -39,7 +39,8 @@ Progress: ██████████ 100%
 
 All decisions logged in PROJECT.md Key Decisions table with outcomes.
 - New sites (ok.ru, cda.pl, xhamster, redgifs) are popup-only -- no injected download buttons
-- Cancel uses optimistic state reset (clear immediately, don't wait for companion)
+- Cancel uses context.WithCancel per download in companion (not process killing)
+- Cancel uses optimistic state reset in popup (clear immediately, don't wait for companion)
 - History fix uses fallback chain: companion url/title > currentDownload > empty string
 
 ### Pending Todos
