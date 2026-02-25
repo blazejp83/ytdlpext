@@ -26,6 +26,9 @@ One-click download from the browser — no copying URLs, no switching to a termi
 - ✓ Cookie-based auth for age-restricted content — v1.0
 - ✓ Download history (50 entries) — v1.0
 - ✓ Keyboard shortcut Ctrl+Shift+D — v1.0
+- ✓ Support for: ok.ru, CDA, xhamster (+ mirrors), redgifs — v1.1
+- ✓ Cancel in-progress downloads from popup — v1.1
+- ✓ Reliable history entries with URL/title fallback — v1.1
 
 ### Active
 
@@ -37,14 +40,16 @@ One-click download from the browser — no copying URLs, no switching to a termi
 - Browser downloads integration — yt-dlp handles file writing directly
 - Automatic yt-dlp updates — user manages their own yt-dlp install
 - Cloud/remote downloads — local only
-- Sites beyond the initial five — can expand later
+- Per-site button injection for new sites — popup-only is sufficient for ok.ru, CDA, xhamster, redgifs
 
 ## Context
 
-Shipped v1.0 with 2,834 LOC across Go + JS + HTML + CSS.
+Shipped v1.1 with 2,949 LOC across Go + JS + HTML + CSS.
 Tech stack: Go (companion), Chrome MV3 (extension), go-ytdlp (yt-dlp binding), native messaging protocol.
-3 phases, 6 plans, 12 tasks completed in 2 days.
-All 5 target sites supported with per-site button injection on YouTube, SoundCloud, and Bandcamp.
+5 phases, 9 plans, 18 tasks completed across v1.0 and v1.1.
+11 supported hostnames: YouTube, Vimeo, Pornhub, Bandcamp, SoundCloud, ok.ru, CDA, xhamster (3 domains), redgifs.
+Per-site button injection on YouTube, SoundCloud, and Bandcamp; popup-only for remaining sites.
+Cancel support with context-based cancellation and optimistic UI reset.
 
 ## Constraints
 
@@ -69,6 +74,10 @@ All 5 target sites supported with per-site button injection on YouTube, SoundClo
 | Per-site MutationObserver injection | Reliable button placement across SPA navigations | ✓ Good |
 | Download history 50-entry cap | Prevents unbounded storage growth | ✓ Good |
 | CookiesFromBrowser: chrome/chromium | Platform-appropriate browser cookie source | ✓ Good |
+| Popup-only for new sites | No injected buttons needed for ok.ru, CDA, xhamster, redgifs | ✓ Good |
+| context.WithCancel for downloads | Clean cancellation vs process killing | ✓ Good |
+| Optimistic cancel UI | Reset immediately on cancel, don't wait for companion | ✓ Good |
+| History fallback chain | companion url/title > currentDownload > empty string | ✓ Good |
 
 ---
-*Last updated: 2026-02-25 after v1.0 milestone*
+*Last updated: 2026-02-25 after v1.1 milestone*

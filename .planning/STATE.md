@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** One-click download from the browser -- no copying URLs, no switching to a terminal.
-**Current focus:** v1.1 Expand & Fix -- complete
+**Current focus:** Planning next milestone
 
 ## Current Position
 
-Phase: 5 of 5 (Cancel Downloads + Fix History)
-Plan: 2/2 complete
-Status: Phase 5 complete, v1.1 milestone done
-Last activity: 2026-02-25 - Cancel button + history fix
+Phase: 5 of 5 (all phases complete)
+Plan: N/A
+Status: Ready to plan next milestone
+Last activity: 2026-02-25 — v1.1 milestone complete
 
-Progress: ██████████ 100%
+Progress: ██████████ 100% (v1.0 + v1.1)
 
 ## Performance Metrics
 
@@ -38,10 +38,6 @@ Progress: ██████████ 100%
 ### Decisions
 
 All decisions logged in PROJECT.md Key Decisions table with outcomes.
-- New sites (ok.ru, cda.pl, xhamster, redgifs) are popup-only -- no injected download buttons
-- Cancel uses context.WithCancel per download in companion (not process killing)
-- Cancel uses optimistic state reset in popup (clear immediately, don't wait for companion)
-- History fix uses fallback chain: companion url/title > currentDownload > empty string
 
 ### Pending Todos
 
@@ -53,11 +49,11 @@ None.
 
 ### Roadmap Evolution
 
-- Milestone v1.1 created: Expand site support + fix UX issues, 2 phases (Phase 4-5)
-- Milestone v1.1 complete
+- Milestone v1.0 created and shipped: 3 phases (1-3)
+- Milestone v1.1 created and shipped: 2 phases (4-5)
 
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: All phases complete, v1.1 milestone done
+Stopped at: v1.1 milestone complete, ready to plan next milestone
 Resume file: None

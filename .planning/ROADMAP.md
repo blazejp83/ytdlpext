@@ -16,6 +16,7 @@ None
 ## Completed Milestones
 
 - ✅ [v1.0 MVP](milestones/v1.0-ROADMAP.md) (Phases 1-3) — SHIPPED 2026-02-25
+- ✅ [v1.1 Expand & Fix](milestones/v1.1-ROADMAP.md) (Phases 4-5) — SHIPPED 2026-02-25
 
 ## Phases
 
@@ -28,31 +29,15 @@ None
 
 </details>
 
-### ✅ v1.1 Expand & Fix — SHIPPED 2026-02-25
+<details>
+<summary>✅ v1.1 Expand & Fix (Phases 4-5) — SHIPPED 2026-02-25</summary>
 
-**Milestone Goal:** Broaden site support and fix core UX issues (cancel + history)
+- [x] Phase 4: New Site Support (1/1 plans) — completed 2026-02-25
+- [x] Phase 5: Cancel Downloads + Fix History (2/2 plans) — completed 2026-02-25
 
-#### Phase 4: New Site Support
-
-**Goal**: Add ok.ru, CDA, xhamster, and redgifs as supported sites (popup-only, no injected buttons)
-**Depends on**: v1.0 complete
-
-Plans:
-- [x] 04-01: Add new site support (ok.ru, CDA, xhamster, redgifs)
-
-#### Phase 5: Cancel Downloads + Fix History
-
-**Goal**: Add cancel-all button for in-progress downloads and fix history empty list bug
-**Depends on**: Phase 4
-
-Plans:
-- [x] 05-01: Cancel support with download tracking (Go companion)
-- [x] 05-02: Cancel button UI + history fix (Extension)
+</details>
 
 ## Progress
-
-**Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|

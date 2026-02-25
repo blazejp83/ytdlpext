@@ -1,5 +1,31 @@
 # Project Milestones: ytdlext
 
+## v1.1 Expand & Fix (Shipped: 2026-02-25)
+
+**Delivered:** Broadened site support to 11 hostnames (ok.ru, CDA, xhamster + mirrors, redgifs) and fixed core UX issues — cancel button for in-progress downloads and history entries missing URL/title.
+
+**Phases completed:** 4-5 (3 plans total)
+
+**Key accomplishments:**
+
+- Added 4 new sites (ok.ru, CDA, xhamster + mirrors, redgifs) as popup-only download targets — 11 total hostnames
+- Cancellable download contexts using context.WithCancel per download with CancelAll method
+- Cancel button in popup UI with full message routing (popup → service worker → companion → back)
+- Fixed history entries missing URL/title after service worker restart via fallback chain
+
+**Stats:**
+
+- 8 files modified
+- 129 lines added (2,949 LOC total)
+- 2 phases, 3 plans, 6 tasks
+- 1 day (same day as v1.0 ship)
+
+**Git range:** `d90d156` → `cc68de7`
+
+**What's next:** TBD — milestone complete, plan next iteration
+
+---
+
 ## v1.0 MVP (Shipped: 2026-02-25)
 
 **Delivered:** Chrome extension + Go companion app for one-click video/audio downloading from 5 supported sites via yt-dlp, with format selection, progress tracking, per-site button injection, and advanced YouTube features.
