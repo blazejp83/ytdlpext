@@ -70,7 +70,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 08-01: TBD
+- [x] 08-01: Fix history entries showing wrong title/filename via PrintJSON metadata
 
 ## Progress
 
@@ -83,4 +83,4 @@ Plans:
 | 5. Cancel Downloads + Fix History | v1.1 | 2/2 | Complete | 2026-02-25 |
 | 6. Format UX | v1.2 | 1/1 | Complete | 2026-02-25 |
 | 7. Download Completion UX | v1.2 | 1/1 | Complete | 2026-02-25 |
-| 8. History Title Fix | v1.2 | 0/? | Not started | - |
+| 8. History Title Fix | v1.2 | 1/1 | Complete | 2026-02-25 |
