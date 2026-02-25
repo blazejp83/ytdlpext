@@ -87,6 +87,7 @@ func (m *Manager) runDownload(ctx context.Context, downloadID string, req *messa
 		Output(outputTmpl).
 		Paths(dir).
 		Progress().
+		PrintJSON().
 		ProgressFunc(500*time.Millisecond, func(update ytdlp.ProgressUpdate) {
 			progressSeen = true
 			speed := humanizeBytes(m.calcSpeed(update)) + "/s"
@@ -212,9 +213,15 @@ func (m *Manager) runDownload(ctx context.Context, downloadID string, req *messa
 		outputDir = filepath.Dir(filename)
 	}
 
+	// Guard empty filename: filepath.Base("") returns "." which is not useful.
+	baseName := ""
+	if filename != "" {
+		baseName = filepath.Base(filename)
+	}
+
 	m.send(messaging.TypeComplete, &messaging.DownloadComplete{
 		DownloadID: downloadID,
-		Filename:   filepath.Base(filename),
+		Filename:   baseName,
 		Path:       filename,
 		Directory:  outputDir,
 		URL:        req.URL,
