@@ -43,6 +43,7 @@ All decisions logged in PROJECT.md Key Decisions table with outcomes.
 
 1. Cache formats on popup navigation (ui) — `.planning/todos/pending/2026-02-25-cache-formats-on-popup-navigation.md`
 2. Remember last format choice (ui) — `.planning/todos/pending/2026-02-25-remember-last-format-choice.md`
+3. Auto-close popup after download completes (ui) — `.planning/todos/pending/2026-02-25-auto-close-popup-after-download.md`
 
 ### Blockers/Concerns
 
