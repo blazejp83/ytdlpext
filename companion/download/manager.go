@@ -193,12 +193,16 @@ func (m *Manager) runDownload(ctx context.Context, downloadID string, req *messa
 		return
 	}
 
-	// Try to extract filename from result.
+	// Try to extract filename and title from result.
 	filename := ""
+	title := ""
 	if infos, infoErr := result.GetExtractedInfo(); infoErr == nil && len(infos) > 0 {
 		info := infos[0]
 		if info.Filename != nil {
 			filename = *info.Filename
+		}
+		if info.Title != nil {
+			title = *info.Title
 		}
 	}
 
@@ -213,6 +217,8 @@ func (m *Manager) runDownload(ctx context.Context, downloadID string, req *messa
 		Filename:   filepath.Base(filename),
 		Path:       filename,
 		Directory:  outputDir,
+		URL:        req.URL,
+		Title:      title,
 	})
 }
 

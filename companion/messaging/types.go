@@ -55,6 +55,8 @@ type DownloadComplete struct {
 	Filename   string `json:"filename"`
 	Path       string `json:"path"`
 	Directory  string `json:"directory"`
+	URL        string `json:"url"`
+	Title      string `json:"title"`
 }
 
 // ErrorResponse is sent when an error occurs.
