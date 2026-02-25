@@ -21,6 +21,26 @@ let pendingFormatsCallback = null;
 // Notification ID -> download directory mapping for "Open Folder" on click.
 const notificationDirs = new Map();
 
+// Supported site hostnames (mirrors manifest content_scripts matches).
+const SUPPORTED_HOSTS = [
+  "youtube.com",
+  "vimeo.com",
+  "pornhub.com",
+  "bandcamp.com",
+  "soundcloud.com",
+];
+
+function isSupportedUrl(url) {
+  try {
+    const hostname = new URL(url).hostname;
+    return SUPPORTED_HOSTS.some(
+      (h) => hostname === h || hostname.endsWith("." + h)
+    );
+  } catch {
+    return false;
+  }
+}
+
 // --- Native host connection ---
 
 function connectToHost() {
@@ -77,6 +97,26 @@ function sendToHost(message) {
 
 // --- Native message handling ---
 
+// Reset download badge on the active tab to the default "DL" indicator.
+function resetDownloadBadge() {
+  chrome.tabs
+    .query({ active: true, currentWindow: true })
+    .then((tabs) => {
+      if (tabs.length > 0) {
+        const tabId = tabs[0].id;
+        const info = pageInfo.get(tabId);
+        if (info) {
+          chrome.action.setBadgeText({ text: "DL", tabId: tabId });
+          chrome.action.setBadgeBackgroundColor({
+            color: "#4A90D9",
+            tabId: tabId,
+          });
+        }
+      }
+    })
+    .catch(() => {});
+}
+
 function handleNativeMessage(msg) {
   if (msg.type === "progress" && msg.data) {
     currentDownload = {
@@ -103,6 +143,7 @@ function handleNativeMessage(msg) {
       directory: msg.data.directory || "",
     };
     broadcastToPopup({ type: "downloadComplete", ...currentDownload });
+    resetDownloadBadge();
 
     // Create Chrome notification for download completion.
     const notifId = "dl-complete-" + Date.now();
@@ -135,6 +176,7 @@ function handleNativeMessage(msg) {
       errorMessage: msg.data.message || "Unknown error",
     };
     broadcastToPopup({ type: "downloadError", ...currentDownload });
+    resetDownloadBadge();
     return;
   }
 
@@ -199,6 +241,45 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return;
   }
 
+  // Content script: quick download from injected button.
+  if (message.type === "quickDownload") {
+    chrome.storage.local.get(["downloadDirectory", "fileExists"], (result) => {
+      const directory = result.downloadDirectory || "~/Downloads";
+      const fileExists = result.fileExists || "overwrite";
+      currentDownload = {
+        id: null,
+        url: message.url,
+        title: message.title || "",
+        status: "starting",
+        percentage: 0,
+        speed: "",
+        eta: "",
+        filename: "",
+      };
+
+      const downloadData = {
+        url: message.url,
+        directory: directory,
+        fileExists: fileExists,
+        audioOnly: !!message.audioOnly,
+      };
+      if (message.audioOnly) downloadData.audioFormat = "mp3";
+
+      // Set badge to indicate active download.
+      if (sender.tab) {
+        chrome.action.setBadgeText({ text: "DL...", tabId: sender.tab.id });
+        chrome.action.setBadgeBackgroundColor({
+          color: "#E67E22",
+          tabId: sender.tab.id,
+        });
+      }
+
+      sendToHost({ type: "download", data: downloadData });
+      sendResponse({ ok: true });
+    });
+    return true; // Will respond asynchronously.
+  }
+
   // Popup: get page info for the active tab.
   if (message.type === "getPageInfo") {
     chrome.tabs
@@ -208,10 +289,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           sendResponse({ supported: false });
           return;
         }
-        const tabId = tabs[0].id;
-        const info = pageInfo.get(tabId);
+        const tab = tabs[0];
+        const info = pageInfo.get(tab.id);
         if (info) {
           sendResponse({ url: info.url, title: info.title, supported: true });
+        } else if (tab.url && isSupportedUrl(tab.url)) {
+          // Fallback: content script may not have reported yet (SPA race).
+          pageInfo.set(tab.id, { url: tab.url, title: tab.title || "" });
+          sendResponse({ url: tab.url, title: tab.title || "", supported: true });
         } else {
           sendResponse({ supported: false });
         }
@@ -242,8 +327,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Popup: start a download.
   if (message.type === "startDownload") {
-    chrome.storage.local.get("downloadDirectory", (result) => {
+    chrome.storage.local.get(["downloadDirectory", "fileExists"], (result) => {
       const directory = result.downloadDirectory || "~/Downloads";
+      const fileExists = result.fileExists || "overwrite";
       currentDownload = {
         id: null,
         url: message.url,
@@ -255,7 +341,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         filename: "",
       };
 
-      const downloadData = { url: message.url, directory: directory };
+      const downloadData = { url: message.url, directory: directory, fileExists: fileExists };
 
       // Pass format options if provided.
       if (message.formatId) downloadData.formatId = message.formatId;
