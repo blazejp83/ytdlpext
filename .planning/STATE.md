@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** One-click download from the browser -- no copying URLs, no switching to a terminal.
-**Current focus:** Planning next milestone
+**Current focus:** v1.2 UI Polish
 
 ## Current Position
 
-Phase: 5 of 5 (all phases complete)
-Plan: N/A
-Status: Ready to plan next milestone
-Last activity: 2026-02-25 — v1.1 milestone complete
+Phase: 6 of 8 (Format UX)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-02-25 — Milestone v1.2 created
 
-Progress: ██████████ 100% (v1.0 + v1.1)
+Progress: ░░░░░░░░░░ 0%
 
 ## Performance Metrics
 
@@ -54,9 +54,10 @@ None.
 
 - Milestone v1.0 created and shipped: 3 phases (1-3)
 - Milestone v1.1 created and shipped: 2 phases (4-5)
+- Milestone v1.2 created: UI polish, 3 phases (6-8)
 
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: v1.1 milestone complete, ready to plan next milestone
+Stopped at: Milestone v1.2 initialization
 Resume file: None
