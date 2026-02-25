@@ -146,7 +146,10 @@ function handleNativeMessage(msg) {
       percentage: 100,
       url: msg.data.url || currentDownload?.url || "",
       title: msg.data.title || currentDownload?.title || "",
-      filename: msg.data.filename || currentDownload?.filename || "",
+      filename:
+        msg.data.filename && msg.data.filename !== "."
+          ? msg.data.filename
+          : currentDownload?.filename || "",
       path: msg.data.path || "",
       directory: msg.data.directory || "",
     };
