@@ -40,7 +40,7 @@ None
 **Plans**: TBD
 
 Plans:
-- [ ] 04-01: TBD (run /gsd:plan-phase 4 to break down)
+- [x] 04-01: Add new site support (ok.ru, CDA, xhamster, redgifs)
 
 #### Phase 5: Cancel Downloads + Fix History
 
@@ -62,5 +62,5 @@ Phases execute in numeric order: 1 → 2 → 3
 | 1. Foundation | v1.0 | 2/2 | Complete | 2026-02-24 |
 | 2. Full Download Experience | v1.0 | 2/2 | Complete | 2026-02-25 |
 | 3. Site Integration + Enhancements | v1.0 | 2/2 | Complete | 2026-02-25 |
-| 4. New Site Support | v1.1 | 0/? | Not started | - |
+| 4. New Site Support | v1.1 | 1/1 | Complete | 2026-02-25 |
 | 5. Cancel Downloads + Fix History | v1.1 | 0/? | Not started | - |
