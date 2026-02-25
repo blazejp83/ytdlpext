@@ -352,6 +352,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.embedThumbnail !== undefined)
         downloadData.embedThumbnail = message.embedThumbnail;
 
+      // Pass Phase 3 options if provided.
+      if (message.sponsorBlockRemove)
+        downloadData.sponsorBlockRemove = message.sponsorBlockRemove;
+      if (message.subtitleLangs)
+        downloadData.subtitleLangs = message.subtitleLangs;
+      if (message.embedSubs !== undefined)
+        downloadData.embedSubs = message.embedSubs;
+      if (message.useBrowserCookies)
+        downloadData.useBrowserCookies = message.useBrowserCookies;
+
       sendToHost({
         type: "download",
         data: downloadData,

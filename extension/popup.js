@@ -33,9 +33,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const embedMetadata = document.getElementById("embed-metadata");
   const embedThumbnail = document.getElementById("embed-thumbnail");
 
+  // Options section elements.
+  const youtubeOptions = document.getElementById("youtube-options");
+  const sponsorblockCheck = document.getElementById("sponsorblock");
+  const subtitleLangSelect = document.getElementById("subtitle-lang");
+  const embedSubsCheck = document.getElementById("embed-subs");
+  const useCookiesCheck = document.getElementById("use-cookies");
+
+  const AUDIO_PRIMARY_HOSTS = ["soundcloud.com", "bandcamp.com"];
+
   let currentUrl = "";
   let currentTitle = "";
+  let isAudioPrimary = false;
   let selectedAudioFormat = "mp3";
+  let lastDownloadOptions = {};
 
   // Query the service worker for page info.
   chrome.runtime.sendMessage({ type: "getPageInfo" }, (response) => {
@@ -47,6 +58,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (response && response.supported) {
       currentUrl = response.url;
       currentTitle = response.title || "";
+      try {
+        const hostname = new URL(currentUrl).hostname;
+        isAudioPrimary = AUDIO_PRIMARY_HOSTS.some(
+          (h) => hostname === h || hostname.endsWith("." + h)
+        );
+        // Show YouTube-specific options only on YouTube.
+        if (hostname.includes("youtube.com")) {
+          youtubeOptions.hidden = false;
+        }
+      } catch {}
+
       const title = response.title || "Untitled";
       pageTitle.textContent =
         title.length > 60 ? title.substring(0, 57) + "..." : title;
@@ -98,6 +120,16 @@ document.addEventListener("DOMContentLoaded", () => {
         populateFormats(response);
         hideAll();
         formatPicker.hidden = false;
+
+        const hasVideoFormats = (response.videoFormats || []).length > 0;
+        if (isAudioPrimary || !hasVideoFormats) {
+          // Audio-primary site or no video formats: show Audio tab only.
+          tabVideo.hidden = true;
+          tabAudio.classList.add("active");
+          tabVideo.classList.remove("active");
+          tabContentVideo.hidden = true;
+          tabContentAudio.hidden = false;
+        }
       }
     );
   }
@@ -127,9 +159,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const detail = document.createElement("span");
       detail.className = "format-detail";
       const parts = [];
-      if (fmt.codec) parts.push(fmt.codec);
+      if (fmt.vcodec) parts.push(fmt.vcodec);
       if (fmt.fps && fmt.fps > 30) parts.push(fmt.fps + "fps");
-      if (fmt.fileSize) parts.push(formatFileSize(fmt.fileSize));
+      if (fmt.filesize) parts.push(formatFileSize(fmt.filesize));
       detail.textContent = parts.join(" | ");
 
       row.appendChild(radio);
@@ -146,6 +178,16 @@ document.addEventListener("DOMContentLoaded", () => {
           .forEach((r) => r.classList.remove("selected"));
         row.classList.add("selected");
       });
+    });
+
+    // Populate subtitle language dropdown.
+    const subtitles = data.subtitles || [];
+    subtitleLangSelect.innerHTML = '<option value="">None</option>';
+    subtitles.forEach((sub) => {
+      const opt = document.createElement("option");
+      opt.value = sub.code;
+      opt.textContent = sub.auto ? sub.name + " (auto)" : sub.name;
+      subtitleLangSelect.appendChild(opt);
     });
   }
 
@@ -207,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
   downloadBtn.addEventListener("click", () => startDownload({}));
 
   // Retry button click handler.
-  retryBtn.addEventListener("click", () => startDownload({}));
+  retryBtn.addEventListener("click", () => startDownload(lastDownloadOptions));
 
   // Download another button click handler.
   downloadAnotherBtn.addEventListener("click", () => {
@@ -240,6 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function startDownload(options) {
     if (!currentUrl) return;
+    lastDownloadOptions = options;
 
     hideAll();
     progressSection.hidden = false;
@@ -249,11 +292,20 @@ document.addEventListener("DOMContentLoaded", () => {
     progressEta.textContent = "";
     progressFilename.textContent = "Starting download...";
 
+    // Include Phase 3 options.
+    const phase3Options = {};
+    if (sponsorblockCheck.checked) phase3Options.sponsorBlockRemove = "all";
+    const subLang = subtitleLangSelect.value;
+    if (subLang) phase3Options.subtitleLangs = subLang;
+    phase3Options.embedSubs = embedSubsCheck.checked;
+    phase3Options.useBrowserCookies = useCookiesCheck.checked;
+
     chrome.runtime.sendMessage({
       type: "startDownload",
       url: currentUrl,
       title: currentTitle,
       ...options,
+      ...phase3Options,
     });
   }
 
