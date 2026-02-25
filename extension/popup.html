@@ -13,6 +13,7 @@
           <div class="page-title" id="page-title">Loading...</div>
           <div class="page-url" id="page-url"></div>
         </div>
+        <a class="history-link" id="history-link" title="Download History">History</a>
         <button class="settings-btn" id="settings-btn" title="Settings">
           &#9881;
         </button>
@@ -107,6 +108,12 @@
 
       <div class="unsupported" id="unsupported-section" hidden>
         <div class="unsupported-text">Not a supported site</div>
+      </div>
+
+      <div id="history-section" hidden>
+        <a class="history-back" id="history-back">&larr; Back</a>
+        <div class="history-list" id="history-list"></div>
+        <button class="history-clear-btn" id="history-clear">Clear History</button>
       </div>
     </div>
     <script src="popup.js"></script>

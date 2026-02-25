@@ -159,6 +159,21 @@ function handleNativeMessage(msg) {
       notificationDirs.set(notifId, currentDownload.directory);
     }
 
+    // Store download in history.
+    chrome.storage.local.get(["downloadHistory"], (result) => {
+      const history = result.downloadHistory || [];
+      history.unshift({
+        url: currentDownload.url,
+        title: currentDownload.title,
+        filename: currentDownload.filename,
+        directory: currentDownload.directory,
+        timestamp: Date.now(),
+      });
+      // Keep max 50 entries.
+      if (history.length > 50) history.length = 50;
+      chrome.storage.local.set({ downloadHistory: history });
+    });
+
     // Reset download state after 30 seconds.
     setTimeout(() => {
       if (currentDownload?.status === "complete") {
@@ -394,6 +409,49 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 
 chrome.tabs.onRemoved.addListener((tabId) => {
   pageInfo.delete(tabId);
+});
+
+// --- Keyboard shortcut ---
+
+chrome.commands.onCommand.addListener((command) => {
+  if (command !== "download-current") return;
+  chrome.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+    if (tabs.length === 0) return;
+    const tab = tabs[0];
+    const info = pageInfo.get(tab.id);
+    if (!info) return;
+    if (!isSupportedUrl(info.url)) return;
+
+    // Determine if audio-primary site.
+    const hostname = new URL(info.url).hostname;
+    const audioOnly = ["soundcloud.com", "bandcamp.com"].some(
+      (h) => hostname === h || hostname.endsWith("." + h)
+    );
+
+    // Trigger quick download with defaults.
+    chrome.storage.local.get(["downloadDirectory", "fileExists"], (result) => {
+      const directory = result.downloadDirectory || "~/Downloads";
+      const fileExists = result.fileExists || "overwrite";
+      currentDownload = {
+        id: null,
+        url: info.url,
+        title: info.title || "",
+        status: "starting",
+        percentage: 0,
+        speed: "",
+        eta: "",
+        filename: "",
+      };
+      const downloadData = {
+        url: info.url,
+        directory,
+        fileExists,
+        audioOnly,
+      };
+      if (audioOnly) downloadData.audioFormat = "mp3";
+      sendToHost({ type: "download", data: downloadData });
+    });
+  });
 });
 
 // --- Initialization ---

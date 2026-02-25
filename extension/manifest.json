@@ -21,6 +21,15 @@
     "128": "icons/icon128.png"
   },
   "options_page": "settings.html",
+  "commands": {
+    "download-current": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+D",
+        "mac": "Command+Shift+D"
+      },
+      "description": "Download current page"
+    }
+  },
   "content_scripts": [
     {
       "matches": [

@@ -21,6 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const retryBtn = document.getElementById("retry-btn");
   const unsupportedSection = document.getElementById("unsupported-section");
   const settingsBtn = document.getElementById("settings-btn");
+  const historyLink = document.getElementById("history-link");
+  const historySection = document.getElementById("history-section");
+  const historyBack = document.getElementById("history-back");
+  const historyList = document.getElementById("history-list");
+  const historyClear = document.getElementById("history-clear");
 
   // Format picker elements.
   const tabVideo = document.getElementById("tab-video");
@@ -265,6 +270,93 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // History link: show history section.
+  historyLink.addEventListener("click", () => {
+    hideAll();
+    historySection.hidden = false;
+    chrome.storage.local.get(["downloadHistory"], (result) => {
+      renderHistory(result.downloadHistory || []);
+    });
+  });
+
+  // History back: return to main view.
+  historyBack.addEventListener("click", () => {
+    historySection.hidden = true;
+    loadFormats();
+  });
+
+  // Clear history.
+  historyClear.addEventListener("click", () => {
+    chrome.storage.local.set({ downloadHistory: [] }, () => {
+      renderHistory([]);
+    });
+  });
+
+  function renderHistory(entries) {
+    historyList.innerHTML = "";
+    if (entries.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "history-empty";
+      empty.textContent = "No downloads yet";
+      historyList.appendChild(empty);
+      return;
+    }
+    entries.forEach((entry) => {
+      const el = document.createElement("div");
+      el.className = "history-entry";
+
+      const title = document.createElement("div");
+      title.className = "history-title";
+      const t = entry.title || "Untitled";
+      title.textContent = t.length > 40 ? t.substring(0, 37) + "..." : t;
+
+      const filename = document.createElement("div");
+      filename.className = "history-filename";
+      filename.textContent = entry.filename || "";
+
+      const meta = document.createElement("div");
+      meta.className = "history-meta";
+
+      const time = document.createElement("span");
+      time.className = "history-time";
+      time.textContent = relativeTime(entry.timestamp);
+
+      meta.appendChild(time);
+
+      if (entry.directory) {
+        const openBtn = document.createElement("button");
+        openBtn.className = "history-open-btn";
+        openBtn.textContent = "Open Folder";
+        openBtn.addEventListener("click", () => {
+          chrome.runtime.sendMessage({
+            type: "openFolder",
+            path: entry.directory,
+          });
+        });
+        meta.appendChild(openBtn);
+      }
+
+      el.appendChild(title);
+      el.appendChild(filename);
+      el.appendChild(meta);
+      historyList.appendChild(el);
+    });
+  }
+
+  function relativeTime(timestamp) {
+    const diff = Date.now() - timestamp;
+    const seconds = Math.floor(diff / 1000);
+    if (seconds < 60) return "Just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return minutes + " min ago";
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + " hour" + (hours > 1 ? "s" : "") + " ago";
+    const days = Math.floor(hours / 24);
+    if (days === 1) return "Yesterday";
+    if (days < 30) return days + " days ago";
+    return new Date(timestamp).toLocaleDateString();
+  }
+
   // Listen for messages from service worker.
   chrome.runtime.onMessage.addListener((message) => {
     if (message.type === "downloadProgress") {
@@ -359,6 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
     completeSection.hidden = true;
     errorSection.hidden = true;
     unsupportedSection.hidden = true;
+    historySection.hidden = true;
   }
 
   function truncateUrl(url) {
