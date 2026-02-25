@@ -9,18 +9,18 @@ See: .planning/PROJECT.md (updated 2026-02-25)
 
 ## Current Position
 
-Phase: 7 of 8 (Download Completion UX)
+Phase: 8 of 8 (History Title Fix)
 Plan: 01 complete
-Status: Plan 07-01 executed
-Last activity: 2026-02-25 — Auto-close countdown on download complete
+Status: Plan 08-01 executed
+Last activity: 2026-02-25 — Fix history entries showing wrong title/filename
 
-Progress: ######.... 67%
+Progress: ########## 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: ~4.3 min
+- Total plans completed: 12
+- Average duration: ~4.1 min
 - Total execution time: ~0.8 hours
 
 **By Phase:**
@@ -34,6 +34,7 @@ Progress: ######.... 67%
 | 05-cancel-fix-history | 2/2 | ~6 min | ~3 min |
 | 06-format-ux | 1/1 | ~4 min | ~4 min |
 | 07-download-completion-ux | 1/1 | ~3 min | ~3 min |
+| 08-history-title-fix | 1/1 | ~3 min | ~3 min |
 
 ## Accumulated Context
 
@@ -45,13 +46,14 @@ All decisions logged in PROJECT.md Key Decisions table with outcomes.
 - Resolution matching: by label text not format ID (IDs vary across videos)
 - Only video resolution persisted, not audio format (MP3 default is sensible)
 - Auto-close: 5-second countdown, timer cleared in hideAll() for safety
+- PrintJSON for download metadata: use PrintJSON() not DumpJSON() in download path (DumpJSON dumps without downloading)
 
 ### Pending Todos
 
 1. ~~Cache formats on popup navigation (ui)~~ -- Done in 06-01
 2. ~~Remember last format choice (ui)~~ -- Done in 06-01
 3. ~~Auto-close popup after download completes (ui)~~ -- Done in 07-01
-4. Fix history missing video titles (ui) -- `.planning/todos/pending/2026-02-25-fix-history-missing-video-titles.md`
+4. ~~Fix history missing video titles (ui)~~ -- Done in 08-01
 
 ### Blockers/Concerns
 
@@ -61,10 +63,10 @@ None.
 
 - Milestone v1.0 created and shipped: 3 phases (1-3)
 - Milestone v1.1 created and shipped: 2 phases (4-5)
-- Milestone v1.2 created: UI polish, 3 phases (6-8)
+- Milestone v1.2 created and shipped: 3 phases (6-8)
 
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Phase 07, plan 01 complete
+Stopped at: Phase 08, plan 01 complete -- all phases done
 Resume file: None
