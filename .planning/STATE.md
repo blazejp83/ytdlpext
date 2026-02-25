@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-25)
 
 **Core value:** One-click download from the browser -- no copying URLs, no switching to a terminal.
-**Current focus:** v1.0 shipped — planning next milestone
+**Current focus:** v1.1 Expand & Fix — broaden site support, cancel downloads, fix history
 
 ## Current Position
 
-Phase: 3 of 3 (all complete)
-Plan: All plans complete
-Status: v1.0 MVP shipped
-Last activity: 2026-02-25 -- v1.0 milestone complete
+Phase: 4 of 5 (New Site Support)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-02-25 - Milestone v1.1 created
 
-Progress: ########## 100%
+Progress: ░░░░░░░░░░ 0%
 
 ## Performance Metrics
 
@@ -45,8 +45,12 @@ None.
 
 None.
 
+### Roadmap Evolution
+
+- Milestone v1.1 created: Expand site support + fix UX issues, 2 phases (Phase 4-5)
+
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: v1.0 milestone complete
-Resume file: .planning/MILESTONES.md
+Stopped at: Milestone v1.1 initialization
+Resume file: None
