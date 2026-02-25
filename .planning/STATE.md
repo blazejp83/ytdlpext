@@ -5,34 +5,35 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** One-click download from the browser -- no copying URLs, no switching to a terminal.
-**Current focus:** Phase 2 in progress -- companion backend features complete, extension UI next
+**Current focus:** Phase 3 in progress -- Site Integration + Enhancements
 
 ## Current Position
 
-Phase: 2 of 3 (Full Download) -- IN PROGRESS
-Plan: 02-01 complete (companion format query, audio extraction, enhanced downloads)
-Status: Phase 2 plan 01 complete, plans 02+ pending
-Last activity: 2026-02-24 -- Plan 02-01 complete (format querying, audio extraction, folder opening)
+Phase: 3 of 3 (Site Integration + Enhancements) -- IN PROGRESS
+Plan: 03-01 complete (Go companion SponsorBlock/subtitles/cookies + per-site download buttons)
+Status: Phase 3 plan 1 of 2 done
+Last activity: 2026-02-25 -- Plan 03-01 complete
 
-Progress: #####░░░░░ 50%
+Progress: #########░ 90%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 7 min
-- Total execution time: ~0.37 hours
+- Total plans completed: 5
+- Average duration: 6 min
+- Total execution time: ~0.5 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 2/2 | 16 min | 8 min |
-| 02-full-download | 1/? | 6 min | 6 min |
+| 02-full-download | 2/2 | ~12 min | ~6 min |
+| 03-site-integration-enhancements | 1/2 | 5 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (8 min), 01-02 (8 min), 02-01 (6 min)
-- Trend: Improving, 6 min latest
+- Last 5 plans: 01-02 (8 min), 02-01 (6 min), 02-02 (~6 min), 03-01 (5 min)
+- Trend: Stable ~5-6 min
 
 ## Accumulated Context
 
@@ -57,6 +58,11 @@ Recent decisions affecting current work:
 - Audio quality: AudioQuality("0") for MP3 best VBR, omit for lossless
 - Format merge: FormatID+bestaudio/FormatID with MergeOutputFormat(mp4)
 - Platform folder open: xdg-open (Linux), open (macOS), explorer (Windows)
+- CookiesFromBrowser: "chrome" on macOS/Windows, "chromium" on Linux (runtime.GOOS)
+- SubtitleLang type with Auto bool for manual vs auto-generated distinction
+- Per-site button injection via MutationObserver (YouTube #owner, SoundCloud .soundActions, Bandcamp .tralbumCommands)
+- quickDownload message type: content script -> service worker -> native host, bypassing popup
+- Orange "DL..." badge for active quick downloads, reset to blue "DL" on complete/error
 
 ### Pending Todos
 
@@ -68,6 +74,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-24
-Stopped at: Plan 02-01 complete (companion backend for Phase 2)
-Resume file: .planning/phases/02-full-download/02-01-SUMMARY.md
+Last session: 2026-02-25
+Stopped at: Plan 03-01 complete, ready for plan 03-02
+Resume file: .planning/phases/03-site-integration-enhancements/03-01-SUMMARY.md
