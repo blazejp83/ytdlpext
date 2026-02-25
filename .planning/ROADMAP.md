@@ -11,7 +11,7 @@ None
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-3 (shipped 2026-02-25)
-- 🚧 **v1.1 Expand & Fix** — Phases 4-5 (in progress)
+- ✅ **v1.1 Expand & Fix** — Phases 4-5 (shipped 2026-02-25)
 
 ## Completed Milestones
 
@@ -28,7 +28,7 @@ None
 
 </details>
 
-### 🚧 v1.1 Expand & Fix (In Progress)
+### ✅ v1.1 Expand & Fix — SHIPPED 2026-02-25
 
 **Milestone Goal:** Broaden site support and fix core UX issues (cancel + history)
 
@@ -36,8 +36,6 @@ None
 
 **Goal**: Add ok.ru, CDA, xhamster, and redgifs as supported sites (popup-only, no injected buttons)
 **Depends on**: v1.0 complete
-**Research**: Unlikely (yt-dlp already supports all 4 sites; work is extension-side site matching)
-**Plans**: TBD
 
 Plans:
 - [x] 04-01: Add new site support (ok.ru, CDA, xhamster, redgifs)
@@ -46,11 +44,10 @@ Plans:
 
 **Goal**: Add cancel-all button for in-progress downloads and fix history empty list bug
 **Depends on**: Phase 4
-**Research**: Unlikely (internal patterns, bug fix)
-**Plans**: TBD
 
 Plans:
-- [ ] 05-01: TBD (run /gsd:plan-phase 5 to break down)
+- [x] 05-01: Cancel support with download tracking (Go companion)
+- [x] 05-02: Cancel button UI + history fix (Extension)
 
 ## Progress
 
@@ -63,4 +60,4 @@ Phases execute in numeric order: 1 → 2 → 3
 | 2. Full Download Experience | v1.0 | 2/2 | Complete | 2026-02-25 |
 | 3. Site Integration + Enhancements | v1.0 | 2/2 | Complete | 2026-02-25 |
 | 4. New Site Support | v1.1 | 1/1 | Complete | 2026-02-25 |
-| 5. Cancel Downloads + Fix History | v1.1 | 0/? | Not started | - |
+| 5. Cancel Downloads + Fix History | v1.1 | 2/2 | Complete | 2026-02-25 |
