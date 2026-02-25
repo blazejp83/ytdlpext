@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** One-click download from the browser -- no copying URLs, no switching to a terminal.
-**Current focus:** Phase 3 in progress -- Site Integration + Enhancements
+**Current focus:** PROJECT COMPLETE -- All 3 phases finished
 
 ## Current Position
 
-Phase: 3 of 3 (Site Integration + Enhancements) -- IN PROGRESS
-Plan: 03-01 complete (Go companion SponsorBlock/subtitles/cookies + per-site download buttons)
-Status: Phase 3 plan 1 of 2 done
-Last activity: 2026-02-25 -- Plan 03-01 complete
+Phase: 3 of 3 (Site Integration + Enhancements) -- COMPLETE
+Plan: 03-02 complete (popup UI controls, download history, keyboard shortcut)
+Status: All phases and plans complete
+Last activity: 2026-02-25 -- Plan 03-02 complete
 
-Progress: #########░ 90%
+Progress: ########## 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 6 min
+- Total plans completed: 6
+- Average duration: ~5.5 min
 - Total execution time: ~0.5 hours
 
 **By Phase:**
@@ -29,18 +29,18 @@ Progress: #########░ 90%
 |-------|-------|-------|----------|
 | 01-foundation | 2/2 | 16 min | 8 min |
 | 02-full-download | 2/2 | ~12 min | ~6 min |
-| 03-site-integration-enhancements | 1/2 | 5 min | 5 min |
+| 03-site-integration-enhancements | 2/2 | 9 min | ~4.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (8 min), 02-01 (6 min), 02-02 (~6 min), 03-01 (5 min)
-- Trend: Stable ~5-6 min
+- Last 5 plans: 02-01 (6 min), 02-02 (~6 min), 03-01 (5 min), 03-02 (4 min)
+- Trend: Accelerating, ~4-5 min
 
 ## Accumulated Context
 
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
+All decisions from the project:
 
 - Go module name: `ytdlext-companion`
 - Native messaging: 4-byte LE uint32 length prefix + JSON body
@@ -63,6 +63,9 @@ Recent decisions affecting current work:
 - Per-site button injection via MutationObserver (YouTube #owner, SoundCloud .soundActions, Bandcamp .tralbumCommands)
 - quickDownload message type: content script -> service worker -> native host, bypassing popup
 - Orange "DL..." badge for active quick downloads, reset to blue "DL" on complete/error
+- YouTube-specific options shown only when hostname includes youtube.com
+- Download history capped at 50 entries in chrome.storage.local
+- Keyboard shortcut Ctrl+Shift+D (Cmd+Shift+D on Mac) via chrome.commands API
 
 ### Pending Todos
 
@@ -75,5 +78,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-25
-Stopped at: Plan 03-01 complete, ready for plan 03-02
-Resume file: .planning/phases/03-site-integration-enhancements/03-01-SUMMARY.md
+Stopped at: Project complete -- all 3 phases finished
+Resume file: .planning/phases/03-site-integration-enhancements/03-02-SUMMARY.md
