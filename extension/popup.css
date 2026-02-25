@@ -394,10 +394,31 @@ body {
 .complete-filename {
   font-size: 12px;
   color: #666;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.countdown-text {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.keep-open-link {
+  font-size: 12px;
+  color: #4a90d9;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.keep-open-link:hover {
+  text-decoration: underline;
 }
 
 /* --- Error --- */
