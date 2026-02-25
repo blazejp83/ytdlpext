@@ -15,8 +15,8 @@ None
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 1: Foundation** - Companion + native messaging + one-click download with progress
-- [ ] **Phase 2: Full Download Experience** - Format picker, audio extraction, metadata, notifications
-- [ ] **Phase 3: Site Integration + Enhancements** - Per-site buttons, YouTube features, advanced options
+- [x] **Phase 2: Full Download Experience** - Format picker, audio extraction, metadata, notifications
+- [x] **Phase 3: Site Integration + Enhancements** - Per-site buttons, YouTube features, advanced options
 
 ## Phase Details
 
@@ -40,19 +40,19 @@ Plans:
 **Plans**: 2 plans, 2 waves
 
 Plans:
-- [ ] 02-01: Go companion - format query, download options, error enhancement (Wave 1)
-- [ ] 02-02: Extension UI - format picker, audio options, notifications (Wave 2, depends: 02-01)
+- [x] 02-01: Go companion - format query, download options, error enhancement (Wave 1)
+- [x] 02-02: Extension UI - format picker, audio options, notifications (Wave 2, depends: 02-01)
 
 ### Phase 3: Site Integration + Enhancements
 **Goal**: Per-site download button injection on all 5 sites, audio-primary UI for Bandcamp/SoundCloud, SponsorBlock and subtitle support for YouTube, cookie-based auth for age-restricted content, download history, and keyboard shortcut
 **Depends on**: Phase 2
 **Requirements**: SITE-01, SITE-02, SITE-03, SITE-04, YT-01, YT-02, ADV-01, ADV-02, ADV-03
 **Research**: Unlikely (content script injection is standard, yt-dlp CLI flags well-documented)
-**Plans**: TBD
+**Plans**: 2 plans, 2 waves
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [x] 03-01: Go companion SponsorBlock/subtitles/cookies + per-site download buttons (Wave 1)
+- [x] 03-02: Popup UI controls, download history, keyboard shortcut (Wave 2, depends: 03-01)
 
 ## Progress
 
@@ -62,5 +62,5 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete | 2026-02-24 |
-| 2. Full Download Experience | 0/TBD | Not started | - |
-| 3. Site Integration + Enhancements | 0/TBD | Not started | - |
+| 2. Full Download Experience | 2/2 | Complete | 2026-02-25 |
+| 3. Site Integration + Enhancements | 2/2 | Complete | 2026-02-25 |

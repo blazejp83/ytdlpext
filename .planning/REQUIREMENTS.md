@@ -16,30 +16,30 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Download
 
 - [x] **DL-01**: User can download best quality with one click (no config needed)
-- [ ] **DL-02**: User can pick video format/quality before downloading (resolution, codec, file size)
-- [ ] **DL-03**: Downloaded videos have audio and video merged automatically (no silent videos)
-- [ ] **DL-04**: Downloaded files are named after the video/track title
-- [ ] **DL-05**: User sees actionable error messages when downloads fail (ffmpeg missing, auth required, format unavailable)
+- [x] **DL-02**: User can pick video format/quality before downloading (resolution, codec, file size)
+- [x] **DL-03**: Downloaded videos have audio and video merged automatically (no silent videos)
+- [x] **DL-04**: Downloaded files are named after the video/track title
+- [x] **DL-05**: User sees actionable error messages when downloads fail (ffmpeg missing, auth required, format unavailable)
 
 ### Audio
 
-- [ ] **AUDIO-01**: User can extract audio as MP3 at 320kbps
-- [ ] **AUDIO-02**: User can download audio in FLAC, WAV, and Ogg formats
-- [ ] **AUDIO-03**: Downloaded audio files include embedded metadata (artist, album, track number)
-- [ ] **AUDIO-04**: Downloaded audio files include embedded cover art thumbnail
+- [x] **AUDIO-01**: User can extract audio as MP3 at 320kbps
+- [x] **AUDIO-02**: User can download audio in FLAC, WAV, and Ogg formats
+- [x] **AUDIO-03**: Downloaded audio files include embedded metadata (artist, album, track number)
+- [x] **AUDIO-04**: Downloaded audio files include embedded cover art thumbnail
 
 ### Progress & Notifications
 
 - [x] **PROG-01**: User sees real-time progress bar with download speed and ETA
-- [ ] **PROG-02**: User receives Chrome notification when download completes
-- [ ] **PROG-03**: User can click notification to open the containing folder
+- [x] **PROG-02**: User receives Chrome notification when download completes
+- [x] **PROG-03**: User can click notification to open the containing folder
 
 ### Site Integration
 
-- [ ] **SITE-01**: Extension injects download buttons on YouTube pages
-- [ ] **SITE-02**: Extension injects download buttons on SoundCloud pages
-- [ ] **SITE-03**: Extension injects download buttons on Bandcamp pages
-- [ ] **SITE-04**: Bandcamp and SoundCloud default to audio-primary download UI
+- [x] **SITE-01**: Extension injects download buttons on YouTube pages
+- [x] **SITE-02**: Extension injects download buttons on SoundCloud pages
+- [x] **SITE-03**: Extension injects download buttons on Bandcamp pages
+- [x] **SITE-04**: Bandcamp and SoundCloud default to audio-primary download UI
 
 ### Configuration
 
@@ -47,14 +47,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### YouTube Enhancements
 
-- [ ] **YT-01**: User can remove sponsor segments from YouTube downloads via SponsorBlock
-- [ ] **YT-02**: User can download and embed subtitles with language selection
+- [x] **YT-01**: User can remove sponsor segments from YouTube downloads via SponsorBlock
+- [x] **YT-02**: User can download and embed subtitles with language selection
 
 ### Advanced
 
-- [ ] **ADV-01**: User can download age-restricted content using browser cookies
-- [ ] **ADV-02**: User can view download history in extension popup
-- [ ] **ADV-03**: User can trigger download via keyboard shortcut (Ctrl+Shift+D)
+- [x] **ADV-01**: User can download age-restricted content using browser cookies
+- [x] **ADV-02**: User can view download history in extension popup
+- [x] **ADV-03**: User can trigger download via keyboard shortcut (Ctrl+Shift+D)
 
 ## v2 Requirements
 
@@ -93,27 +93,27 @@ Which phases cover which requirements. Updated by create-roadmap.
 | FNDTN-02 | Phase 1 | Complete |
 | FNDTN-03 | Phase 1 | Complete |
 | DL-01 | Phase 1 | Complete |
-| DL-02 | Phase 2 | Pending |
-| DL-03 | Phase 2 | Pending |
-| DL-04 | Phase 2 | Pending |
-| DL-05 | Phase 2 | Pending |
-| AUDIO-01 | Phase 2 | Pending |
-| AUDIO-02 | Phase 2 | Pending |
-| AUDIO-03 | Phase 2 | Pending |
-| AUDIO-04 | Phase 2 | Pending |
+| DL-02 | Phase 2 | Complete |
+| DL-03 | Phase 2 | Complete |
+| DL-04 | Phase 2 | Complete |
+| DL-05 | Phase 2 | Complete |
+| AUDIO-01 | Phase 2 | Complete |
+| AUDIO-02 | Phase 2 | Complete |
+| AUDIO-03 | Phase 2 | Complete |
+| AUDIO-04 | Phase 2 | Complete |
 | PROG-01 | Phase 1 | Complete |
-| PROG-02 | Phase 2 | Pending |
-| PROG-03 | Phase 2 | Pending |
-| SITE-01 | Phase 3 | Pending |
-| SITE-02 | Phase 3 | Pending |
-| SITE-03 | Phase 3 | Pending |
-| SITE-04 | Phase 3 | Pending |
+| PROG-02 | Phase 2 | Complete |
+| PROG-03 | Phase 2 | Complete |
+| SITE-01 | Phase 3 | Complete |
+| SITE-02 | Phase 3 | Complete |
+| SITE-03 | Phase 3 | Complete |
+| SITE-04 | Phase 3 | Complete |
 | CFG-01 | Phase 1 | Complete |
-| YT-01 | Phase 3 | Pending |
-| YT-02 | Phase 3 | Pending |
-| ADV-01 | Phase 3 | Pending |
-| ADV-02 | Phase 3 | Pending |
-| ADV-03 | Phase 3 | Pending |
+| YT-01 | Phase 3 | Complete |
+| YT-02 | Phase 3 | Complete |
+| ADV-01 | Phase 3 | Complete |
+| ADV-02 | Phase 3 | Complete |
+| ADV-03 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 25 total
@@ -122,4 +122,4 @@ Which phases cover which requirements. Updated by create-roadmap.
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after Phase 1 completion*
+*Last updated: 2026-02-25 after Phase 3 completion*
