@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressFilename = document.getElementById("progress-filename");
   const completeSection = document.getElementById("complete-section");
   const completeFilename = document.getElementById("complete-filename");
+  const countdownText = document.getElementById("countdown-text");
+  const keepOpenBtn = document.getElementById("keep-open-btn");
   const downloadAnotherBtn = document.getElementById("download-another-btn");
   const errorSection = document.getElementById("error-section");
   const errorText = document.getElementById("error-text");
@@ -54,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedAudioFormat = "mp3";
   let lastDownloadOptions = {};
   let formatCache = null; // { url: string, data: object }
+  let autoCloseTimer = null;
 
   // Query the service worker for page info.
   chrome.runtime.sendMessage({ type: "getPageInfo" }, (response) => {
@@ -308,8 +311,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Keep open button: cancel auto-close countdown.
+  keepOpenBtn.addEventListener("click", () => {
+    if (autoCloseTimer) {
+      clearInterval(autoCloseTimer);
+      autoCloseTimer = null;
+    }
+    countdownText.hidden = true;
+    keepOpenBtn.hidden = true;
+  });
+
   // Download another button click handler.
   downloadAnotherBtn.addEventListener("click", () => {
+    if (autoCloseTimer) {
+      clearInterval(autoCloseTimer);
+      autoCloseTimer = null;
+    }
     loadFormats();
   });
 
@@ -485,6 +502,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (filename) {
       completeFilename.textContent = filename;
     }
+
+    // Start auto-close countdown.
+    let counter = 5;
+    countdownText.textContent = "Closing in " + counter + "s...";
+    countdownText.hidden = false;
+    keepOpenBtn.hidden = false;
+    autoCloseTimer = setInterval(() => {
+      counter--;
+      if (counter <= 0) {
+        clearInterval(autoCloseTimer);
+        autoCloseTimer = null;
+        window.close();
+      } else {
+        countdownText.textContent = "Closing in " + counter + "s...";
+      }
+    }, 1000);
   }
 
   function showError(message) {
@@ -501,6 +534,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function hideAll() {
+    if (autoCloseTimer) {
+      clearInterval(autoCloseTimer);
+      autoCloseTimer = null;
+    }
     formatPicker.hidden = true;
     loadingSection.hidden = true;
     actionSection.hidden = true;
