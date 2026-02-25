@@ -2,7 +2,28 @@
 
 Chrome extension + Go companion for one-click video/audio downloads via yt-dlp.
 
-Supports YouTube, Vimeo, Pornhub, Bandcamp, and SoundCloud.
+## Supported Sites
+
+| Site | Popup Download | Injected Button |
+|------|:-:|:-:|
+| YouTube | ✓ | ✓ |
+| Vimeo | ✓ | |
+| Bandcamp | ✓ | ✓ |
+| SoundCloud | ✓ | ✓ |
+| CDA | ✓ | |
+
+
+## Features
+
+- **One-click download** — best quality by default, or pick a format
+- **Format picker** — video resolutions (h264) and audio-only (MP3, FLAC, WAV, Ogg)
+- **Real-time progress** — speed, ETA, and percentage in the popup
+- **Per-site buttons** — injected download buttons on YouTube, SoundCloud, Bandcamp
+- **Cancel downloads** — cancel all in-progress downloads from the popup
+- **Download history** — last 50 downloads with clickable links
+- **Keyboard shortcut** — `Ctrl+Shift+D` to download the current page
+- **YouTube extras** — SponsorBlock segment removal, subtitle embedding, cookie auth for age-restricted content
+- **Configurable download directory** — set via extension options
 
 ## Prerequisites
 
@@ -50,24 +71,37 @@ Navigate to a supported site. The extension icon activates automatically. Click 
 
 Download progress (speed, ETA, percentage) displays in the popup in real time.
 
+Use `Ctrl+Shift+D` to start a best-quality download without opening the popup.
+
 ### Settings
 
 Right-click the extension icon → **Options** to configure the download directory (defaults to `~/Downloads`).
 
-## Project Structure
+## Architecture
 
 ```
 extension/          Chrome MV3 extension
   manifest.json     Extension manifest
   service-worker.js Background script (native host connection, message routing)
-  content.js        Content script (site detection, SPA navigation)
-  popup.html/js/css Download UI
+  content.js        Content script (site detection, button injection, SPA navigation)
+  popup.html/js/css Download UI (format picker, progress, history, cancel)
   settings.html/js  Settings page
 
 companion/          Go native messaging host
   main.go           Entry point, message routing
-  messaging/        Chrome native messaging protocol (length-prefixed JSON)
-  download/         yt-dlp download manager with progress streaming
+  messaging/        Chrome native messaging protocol (4-byte LE length-prefixed JSON)
+  download/         yt-dlp download manager with progress streaming and cancel support
   install.sh        Linux installer
   install.ps1       Windows installer (PowerShell)
 ```
+
+### How it works
+
+1. Extension detects supported sites via URL matching and activates the popup
+2. User clicks download — extension sends a message to the service worker
+3. Service worker forwards the request to the Go companion via native messaging
+4. Companion runs yt-dlp, streams progress back as JSON messages (every 500ms)
+5. Service worker broadcasts progress to the popup for real-time display
+6. On completion, the download is added to history in Chrome storage
+
+The service worker sends heartbeats every 25 seconds to stay alive during long downloads (MV3 constraint).
