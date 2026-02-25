@@ -37,7 +37,15 @@
         "*://*.vimeo.com/*",
         "*://*.pornhub.com/*",
         "*://*.bandcamp.com/*",
-        "*://*.soundcloud.com/*"
+        "*://*.soundcloud.com/*",
+        "*://*.ok.ru/*",
+        "*://ok.ru/*",
+        "*://*.cda.pl/*",
+        "*://cda.pl/*",
+        "*://*.xhamster.com/*",
+        "*://*.xhamster2.com/*",
+        "*://*.xhamster3.com/*",
+        "*://*.redgifs.com/*"
       ],
       "js": ["content.js"],
       "run_at": "document_idle"

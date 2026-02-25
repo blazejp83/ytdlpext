@@ -28,6 +28,12 @@ const SUPPORTED_HOSTS = [
   "pornhub.com",
   "bandcamp.com",
   "soundcloud.com",
+  "ok.ru",
+  "cda.pl",
+  "xhamster.com",
+  "xhamster2.com",
+  "xhamster3.com",
+  "redgifs.com",
 ];
 
 function isSupportedUrl(url) {
