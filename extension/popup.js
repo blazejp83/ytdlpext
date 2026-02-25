@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let isAudioPrimary = false;
   let selectedAudioFormat = "mp3";
   let lastDownloadOptions = {};
+  let formatCache = null; // { url: string, data: object }
 
   // Query the service worker for page info.
   chrome.runtime.sendMessage({ type: "getPageInfo" }, (response) => {
@@ -111,6 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Load formats from companion.
   function loadFormats() {
+    // Cache hit: reuse formats from a previous fetch in this popup session.
+    if (formatCache && formatCache.url === currentUrl) {
+      showFormatsFromData(formatCache.data);
+      return;
+    }
+
     hideAll();
     loadingSection.hidden = false;
 
@@ -123,21 +130,27 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        populateFormats(response);
-        hideAll();
-        formatPicker.hidden = false;
-
-        const hasVideoFormats = (response.videoFormats || []).length > 0;
-        if (isAudioPrimary || !hasVideoFormats) {
-          // Audio-primary site or no video formats: show Audio tab only.
-          tabVideo.hidden = true;
-          tabAudio.classList.add("active");
-          tabVideo.classList.remove("active");
-          tabContentVideo.hidden = true;
-          tabContentAudio.hidden = false;
-        }
+        formatCache = { url: currentUrl, data: response };
+        showFormatsFromData(response);
       }
     );
+  }
+
+  // Display format data in the picker UI.
+  function showFormatsFromData(data) {
+    populateFormats(data);
+    hideAll();
+    formatPicker.hidden = false;
+
+    const hasVideoFormats = (data.videoFormats || []).length > 0;
+    if (isAudioPrimary || !hasVideoFormats) {
+      // Audio-primary site or no video formats: show Audio tab only.
+      tabVideo.hidden = true;
+      tabAudio.classList.add("active");
+      tabVideo.classList.remove("active");
+      tabContentVideo.hidden = true;
+      tabContentAudio.hidden = false;
+    }
   }
 
   // Populate format list from companion response.
