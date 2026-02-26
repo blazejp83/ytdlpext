@@ -141,6 +141,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Display format data in the picker UI.
   function showFormatsFromData(data) {
+    // Update title from yt-dlp metadata (authoritative source) — fixes stale
+    // title on YouTube SPA navigation where document.title lags behind.
+    if (data.title) {
+      currentTitle = data.title;
+      const t = data.title.length > 60 ? data.title.substring(0, 57) + "..." : data.title;
+      pageTitle.textContent = t;
+    }
+
     populateFormats(data);
     hideAll();
     formatPicker.hidden = false;

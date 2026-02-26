@@ -162,7 +162,8 @@ func handleGetFormats(req messaging.GetFormatsRequest) {
 	}
 
 	// Separate video and audio formats.
-	log.Printf("getFormats: total raw formats from yt-dlp: %d", len(info.Formats))
+	isYouTube := strings.Contains(req.URL, "youtube.com") || strings.Contains(req.URL, "youtu.be")
+	log.Printf("getFormats: total raw formats from yt-dlp: %d (youtube=%v)", len(info.Formats), isYouTube)
 	for _, f := range info.Formats {
 		if f.FormatID == nil {
 			continue
@@ -178,6 +179,15 @@ func handleGetFormats(req messaging.GetFormatsRequest) {
 		// yt-dlp format selection syntax. These are typically YouTube HLS duplicates.
 		if strings.Contains(fid, "-") {
 			log.Printf("getFormats: skip %s (compound ID), protocol=%s", fid, protocol)
+			continue
+		}
+
+		// On YouTube, skip non-https formats (m3u8/HLS). DASH formats cover
+		// the same resolutions and are more reliable — YouTube's SABR streaming
+		// experiment breaks HLS format availability. Other sites may only
+		// offer HLS, so this filter is YouTube-specific.
+		if isYouTube && protocol != "" && protocol != "https" {
+			log.Printf("getFormats: skip %s (protocol=%s, YouTube DASH preferred)", fid, protocol)
 			continue
 		}
 

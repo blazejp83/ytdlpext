@@ -169,6 +169,24 @@ func (m *Manager) runDownload(ctx context.Context, downloadID string, req *messa
 	}
 
 	result, err := cmd.Run(ctx, req.URL)
+
+	// Auto-retry once on "format not available" — YouTube can return degraded
+	// format lists when hit with rapid successive requests (getFormats then
+	// download). A short delay and retry usually resolves it.
+	if err != nil && strings.Contains(err.Error(), "Requested format is not available") && ctx.Err() == nil {
+		log.Printf("format not available for %s, retrying in 2s...", req.URL)
+		select {
+		case <-time.After(2 * time.Second):
+		case <-ctx.Done():
+			log.Printf("download cancelled for %s during retry wait", req.URL)
+			m.send(messaging.TypeCancelled, &messaging.CancelledResponse{
+				DownloadID: downloadID,
+			})
+			return
+		}
+		result, err = cmd.Run(ctx, req.URL)
+	}
+
 	if err != nil {
 		if ctx.Err() == context.Canceled {
 			log.Printf("download cancelled for %s", req.URL)
